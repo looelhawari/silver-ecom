@@ -1,0 +1,14 @@
+{
+  "storefront": {
+    "home": "Home",
+    "shop": "Shop",
+    "customOrder": "Custom Order",
+    "trackOrder": "Track Order",
+    "about": "About",
+    "contact": "Contact",
+    "cart": "Cart",
+    "wishlist": "Wishlist",
+    "account": "Account",
+    "search": "Search"
+  }
+}

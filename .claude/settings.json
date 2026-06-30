@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"d:/white e comm\" status)",
+      "Bash(git -C \"d:/white e comm/frontend\" status)",
+      "Bash(php --version)",
+      "Bash(composer --version)",
+      "Bash(npm --version)",
+      "Bash(composer show *)",
+      "Bash(composer require *)",
+      "Bash(npm run *)",
+      "Bash(rm -f API_DOCUMENTATION.md ARCHITECTURE.md CHANGELOG.md DATABASE_SCHEMA.md DATA_MODELS.md DECISIONS.md DEPLOYMENT.md MODULES.md PERFORMANCE.md README.md SECURITY.md TODO_CHECKLIST.md)",
+      "Bash(ls *.md)",
+      "Bash(git -C frontend log --oneline -5)",
+      "Bash(rm -rf ./.git ./frontend/.git)",
+      "Bash(git init *)",
+      "Bash(grep -iE \"vendor/|node_modules/|/\\\\.env$|\\\\.sqlite|public/js/filament\")"
+    ]
+  }
+}

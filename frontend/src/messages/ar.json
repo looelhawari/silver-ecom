@@ -1,0 +1,14 @@
+{
+  "storefront": {
+    "home": "الرئيسية",
+    "shop": "المتجر",
+    "customOrder": "طلب تصميم خاص",
+    "trackOrder": "تتبع الطلب",
+    "about": "من نحن",
+    "contact": "تواصل معنا",
+    "cart": "السلة",
+    "wishlist": "المفضلة",
+    "account": "حسابي",
+    "search": "بحث"
+  }
+}

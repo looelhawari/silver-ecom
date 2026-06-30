@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/*
+ * Brand theme: "silver-luxury" (see src/config/themeConfig.ts).
+ * Pearl-white base, charcoal text, champagne accent.
+ * Web fonts (e.g. Cormorant Garamond for headings) are wired in the Phase 4 UI pass;
+ * Phase 1 uses an elegant system stack with a serif fallback for headings.
+ */
+:root {
+  --app-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --app-font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --app-font-mono: "Courier New", Courier, monospace;
+
+  --background: #f8f8f6;
+  --foreground: #1b1d22;
+  --surface: #f1f1ee;
+  --primary: #2b2f36;
+  --primary-strong: #1b1d22;
+  --secondary: #8b9099;
+  --accent: #b99b62;
+  --muted: #e9e9e5;
+  --muted-foreground: #6b7078;
+  --border: #d8d8d2;
+  --ring: #2b2f36;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--app-font-sans);
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--app-font-serif);
+  letter-spacing: -0.01em;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
