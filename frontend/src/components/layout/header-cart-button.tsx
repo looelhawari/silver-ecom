@@ -1,0 +1,28 @@
+"use client";
+
+import { ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/stores/useCartStore";
+
+export function HeaderCartButton() {
+  // Avoid hydration mismatch: only show the persisted count after mount.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const count = useCartStore((s) => s.items.reduce((n, i) => n + i.quantity, 0));
+
+  return (
+    <Button asChild variant="default" size="icon" aria-label="Cart" className="relative">
+      <Link href="/cart">
+        <ShoppingBag className="h-4 w-4" />
+        {mounted && count > 0 && (
+          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[10px] font-semibold text-white">
+            {count}
+          </span>
+        )}
+      </Link>
+    </Button>
+  );
+}

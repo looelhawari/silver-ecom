@@ -25,25 +25,25 @@ final class ModuleRegistry
             new ModuleDefinition('Auth', 'auth', $basePath.'/Auth', null),
             new ModuleDefinition('Users', 'users', $basePath.'/Users', null),
 
-            // Catalog & merchandising
-            new ModuleDefinition('Catalog', 'catalog', $basePath.'/Catalog', null),
+            // Catalog & merchandising (public storefront routes at /api/v1/*)
+            new ModuleDefinition('Catalog', 'catalog', $basePath.'/Catalog', ''),
 
             // Purchase flow
             new ModuleDefinition('Cart', 'cart', $basePath.'/Cart', null),
-            new ModuleDefinition('Checkout', 'checkout', $basePath.'/Checkout', null),
-            new ModuleDefinition('Orders', 'orders', $basePath.'/Orders', null),
+            new ModuleDefinition('Checkout', 'checkout', $basePath.'/Checkout', ''),
+            new ModuleDefinition('Orders', 'orders', $basePath.'/Orders', ''),
             new ModuleDefinition('Payments', 'payments', $basePath.'/Payments', null),
             new ModuleDefinition('Shipping', 'shipping', $basePath.'/Shipping', null),
 
             // Silver-specific
-            new ModuleDefinition('Custom Orders', 'custom-orders', $basePath.'/CustomOrders', null),
+            new ModuleDefinition('Custom Orders', 'custom-orders', $basePath.'/CustomOrders', ''),
 
             // Customer extras (optional)
             new ModuleDefinition('Wishlist', 'wishlist', $basePath.'/Wishlist', null),
 
             // Content, support & ops
-            new ModuleDefinition('Content', 'content', $basePath.'/Content', null),
-            new ModuleDefinition('Support', 'support', $basePath.'/Support', null),
+            new ModuleDefinition('Content', 'content', $basePath.'/Content', ''),
+            new ModuleDefinition('Support', 'support', $basePath.'/Support', ''),
             new ModuleDefinition('Media', 'media', $basePath.'/Media', null),
             new ModuleDefinition('Audit Logs', 'audit-logs', $basePath.'/AuditLogs', null),
             new ModuleDefinition('Settings', 'settings', $basePath.'/Settings', 'storefront'),

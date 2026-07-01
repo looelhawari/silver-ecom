@@ -1,6 +1,7 @@
-import { Heart, Search, ShoppingBag, UserRound } from "lucide-react";
+import { Search, UserRound } from "lucide-react";
 import Link from "next/link";
 
+import { HeaderCartButton } from "@/components/layout/header-cart-button";
 import { primaryNavigation, storeConfig } from "@/config";
 import { Button } from "@/components/ui/button";
 
@@ -33,28 +34,23 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" aria-label="Search">
-            <Search className="h-4 w-4" />
+          <Button asChild variant="ghost" size="icon" aria-label="Search">
+            <Link href="/shop">
+              <Search className="h-4 w-4" />
+            </Link>
           </Button>
           <Button
-            className="hidden sm:inline-flex"
-            variant="ghost"
-            size="icon"
-            aria-label="Wishlist"
-          >
-            <Heart className="h-4 w-4" />
-          </Button>
-          <Button
+            asChild
             className="hidden sm:inline-flex"
             variant="ghost"
             size="icon"
             aria-label="Account"
           >
-            <UserRound className="h-4 w-4" />
+            <Link href="/track-order">
+              <UserRound className="h-4 w-4" />
+            </Link>
           </Button>
-          <Button variant="default" size="icon" aria-label="Cart">
-            <ShoppingBag className="h-4 w-4" />
-          </Button>
+          <HeaderCartButton />
         </div>
       </div>
     </header>

@@ -16,36 +16,51 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
 - [x] Documentation suite (README + 11 docs) created
 - [x] Single clean git repo on `main`, remote configured
 
-## Phase 2 — Database & Core Backend
-- [ ] Migrations + models for Catalog, Cart, Orders, Payments, Shipping,
-      CustomOrders, Content, Support, Users(addresses), Wishlist, AuditLogs
-- [ ] Relationships, casts, `$fillable` allowlists
-- [ ] Seeders: categories, silver types, demo products, settings
-- [ ] Form Requests + API Resource pattern
-- [ ] Bilingual (EN/AR) field strategy decided + applied
+> **MySQL** is now the active DB (Laragon, `fidda_silver`). Batches run 3 phases
+> at a time. Some Phase 5/6 backend (order placement, custom submission) was pulled
+> forward so Phase 4 pages are functional end-to-end.
 
-## Phase 3 — Admin Dashboard
-- [ ] Filament resources: products, categories, silver types (+ gram prices)
-- [ ] Orders, custom requests, customers, support, settings, audit logs
-- [ ] Per-resource permission checks; dashboard widgets/charts
+## Phase 2 — Database & Core Backend  ✅ complete
+- [x] Migrations for Catalog, Users(+addresses), Payments, Cart, Orders, Shipping,
+      CustomOrders, Content, Support, Wishlist, AuditLogs (11 migrations)
+- [x] Eloquent models with relationships, casts, `$fillable` allowlists
+- [x] Server-side **pricing engine** (Catalog `PricingService` + `ProductObserver`)
+- [x] Status enums (order/payment/shipping/custom) implementing `HasLabel`
+- [x] Shared services: `MediaService` (secure uploads), `AuditLogger`, `StoreSettings`
+- [x] Seeders: silver types, categories, 14 demo products, payment methods, pages/FAQ/banner, settings
+- [x] Public APIs + API Resources + Form Requests (products, categories, silver-types,
+      home, faqs, pages, contact, checkout validate/place-order, order track,
+      custom-request submit/track, payment-methods)
+- [x] Bilingual strategy: paired `*_ar` columns on translatable fields
+- [x] API tests (StorefrontApiTest) — all green
 
-## Phase 4 — Public Website UI
-- [ ] Home, product listing, product details, cart, checkout (UI)
-- [ ] Track order, custom request, about, contact, FAQ, policies
-- [ ] Loading/empty/error states, toasts, responsive polish
+## Phase 3 — Admin Dashboard  ✅ complete
+- [x] Filament resources: Product (images/variants/pricing), Category, SilverType,
+      Order, CustomRequest (+quote), Customer, PaymentMethod, Support, Page, Faq, Banner, AuditLog
+- [x] Per-resource permission gating (`AuthorizesWithPermission`)
+- [x] Dashboard widgets: business stats + orders-by-status chart
+- [x] Read-only audit log; customers excluded from admin (403) — smoke tests green
 
-## Phase 5 — Order Workflow
-- [ ] Cart + checkout logic, **server-side** pricing & totals
-- [ ] Order creation, order-code generation, status history
-- [ ] Payment method selection, admin order editing, customer tracking
+## Phase 4 — Public Website UI  ✅ complete
+- [x] Home (real data), shop listing (search/filter/sort/pagination), category, product details
+- [x] Cart, checkout (server-validated order placement), order success
+- [x] Track order, custom order (image upload), custom-request tracking
+- [x] About, contact, FAQ, privacy, terms, returns, silver-care
+- [x] Loading/empty/error states, toasts; responsive; SEO metadata per route
 
-## Phase 6 — Custom Silver Workflow
-- [ ] Submit request + secure image upload, tracking code
-- [ ] Admin review/quote, accept/reject, convert-to-order
+## Phase 5 — Order Workflow  🔄 mostly done (pulled forward)
+- [x] Cart (client) + checkout, **server-side** pricing & totals, order creation,
+      order-code generation, status history, payment selection, admin editing, tracking
+- [ ] Payment-proof upload (customer) + admin proof review flow
+- [ ] Coupons (optional)
+
+## Phase 6 — Custom Silver Workflow  🔄 mostly done (pulled forward)
+- [x] Submit request + secure image upload, tracking code, admin review/quote
+- [ ] Customer accept/reject quote in-app; convert-request-to-order action (admin)
 
 ## Phase 7 — Profile & Customer Account
-- [ ] Register/login/logout, profile, addresses, order & request history,
-      change password
+- [ ] Register/login/logout (API + UI), profile, addresses, order & request history,
+      change password, wishlist
 
 ## Phase 8 — Security & Validation Pass
 - [ ] Forms, uploads, authorization, permissions, rate limiting, error handling,

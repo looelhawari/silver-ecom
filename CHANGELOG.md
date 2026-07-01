@@ -2,6 +2,44 @@
 
 All notable changes per phase.
 
+## [Phases 2–4] — 2026-07-01 — Data, Admin & Storefront
+
+### Database & backend (Phase 2)
+- Switched to **MySQL** (Laragon, `fidda_silver`); 11 domain migrations (catalog,
+  users+addresses, payments, cart, orders, custom orders, content, support, wishlist, audit).
+- Eloquent models across modules with relationships/casts/fillable; status enums
+  (order/payment/shipping/custom) with labels.
+- **Server-side pricing engine** (`PricingService` + `ProductObserver`) so
+  `final_price` is always authoritative.
+- Shared services: `MediaService` (validated, renamed uploads), `AuditLogger`, `StoreSettings` (cached).
+- Seeders: 5 silver types, 9 categories, 14 demo products (+ring variants), 4 payment
+  methods, 5 pages, FAQs, hero banner, store settings.
+- Public REST APIs + Resources + Form Requests: products (filter/sort/paginate),
+  product detail (+related), categories, silver-types, home, faqs, pages, contact,
+  checkout validate/place-order, order track, custom-request submit/track, payment-methods.
+- Rate limiting on contact/checkout/track/custom endpoints; guest tracking requires code + phone.
+
+### Admin dashboard (Phase 3)
+- 12 Filament v4 resources (Product with image/variant repeaters + pricing, Category,
+  SilverType, Order, Custom Request with hasOne quote, Customer, PaymentMethod,
+  Support, Page, Faq, Banner, read-only AuditLog) grouped in nav.
+- Per-resource permission gating via `AuthorizesWithPermission`; dashboard stats +
+  orders-by-status chart widgets.
+
+### Storefront (Phase 4)
+- Pages: home (real data), shop (filters/sort/search/pagination), category, product
+  detail (SEO metadata), cart, checkout (server-validated order placement), order
+  success, track order, custom order (image upload), custom tracking, contact, FAQ,
+  about + 4 policy pages.
+- Persistent cart (Zustand), live header cart count, product cards, toasts,
+  loading/empty/error states, `next/image` remote-pattern config.
+
+### Verified
+- Backend: `php artisan test` → **12 passed / 60 assertions** (admin smoke incl.
+  customer-403, storefront APIs, IDOR + out-of-stock guards, custom orders, contact).
+- Frontend: `npm run build` clean (18 routes, TypeScript ✓).
+- End-to-end: home page SSRs live products from the API; `/shop` 200.
+
 ## [Phase 1] — 2026-07-01 — Project Setup & Foundation
 
 ### Added

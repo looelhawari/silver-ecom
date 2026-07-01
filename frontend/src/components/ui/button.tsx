@@ -13,6 +13,8 @@ const buttonVariants = cva(
           "bg-[var(--primary)] text-white hover:bg-[var(--primary-strong)]",
         secondary:
           "border-[var(--border)] bg-white/90 text-[var(--foreground)] hover:bg-[var(--surface)]",
+        outline:
+          "border-[var(--border)] bg-transparent text-[var(--foreground)] hover:bg-[var(--surface)]",
         ghost:
           "text-[var(--foreground)] hover:bg-[var(--surface)]",
       },
