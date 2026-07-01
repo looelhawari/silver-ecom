@@ -87,8 +87,22 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
 - [x] Printable invoice page (`/order/invoice`)
 - [x] Deployment guide, `.env.example`, production checklist (see DEPLOYMENT.md)
 
+## Homepage redesign & interactivity  ✅ complete
+- [x] Luxury homepage: 17 reusable sections (hero, trust, categories, collections,
+      featured, custom-order story, pricing calculator, why-buy, tracking timeline,
+      payment trust, reviews, social, FAQ, final CTA) + config-driven `homepageData.ts`
+- [x] Interactive/animated: typing effect, count-up stats, cursor tilt, silver marquee,
+      scroll-progress bar, spotlight cards, scroll reveals — GPU-light, reduced-motion aware
+- [x] Fixed reduced-motion over-suppression (page no longer appears static)
+
+## Completeness pass (master-prompt gaps)  ✅ complete
+- [x] Admin Store Settings page; customer relation managers (orders/requests/notes)
+- [x] Dashboard: recent-orders + revenue widgets; broader audit logging
+- [x] Shop price/weight filters; product Share button; home support/social section
+
 ---
 
-**Status: Phases 1–9 complete.** Remaining optional/deferred: coupons, invoice PDF
-generation (printable page shipped), password-reset email delivery (needs mail creds),
-Arabic UI translation pass (schema + i18n scaffolding ready).
+**Status: all planned phases complete + homepage redesign.** Remaining
+optional/deferred: coupons, invoice **PDF** (printable page shipped), password-reset
+**email delivery** (needs mail creds), full **Arabic UI** translation (schema + i18n
+scaffolding ready).

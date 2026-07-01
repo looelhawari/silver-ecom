@@ -2,6 +2,21 @@
 
 All notable changes per phase.
 
+## [Docs] — 2026-07-01 — Documentation brought current
+
+Refreshed all Markdown docs so a new developer has an accurate, complete picture:
+- `DATA_MODELS.md` / `DATABASE_SCHEMA.md`: rewritten from "planned" to the actual
+  implemented models, tables, columns, seeds and migrations.
+- `README.md`: added a **Developer guide** (mental model, golden rules, add-a-feature
+  walkthrough), refreshed highlights (luxury homepage), test counts, token auth.
+- `ARCHITECTURE.md`: real frontend architecture (rendering split, structure, auth,
+  data flow) + token auth + CORS/headers/audit.
+- `frontend/README.md`: routes, homepage + interactive components, config, auth, a11y.
+- `PERFORMANCE.md`: homepage animation performance rules; current status.
+- `MODULES.md`: live API routes per module; `DECISIONS.md`: ADR-012/013/014;
+  `TODO_CHECKLIST.md`: homepage + completeness pass; `backend/README.md` refreshed;
+  `API_DOCUMENTATION.md`: password-reset endpoints.
+
 ## [Homepage interactivity pass] — 2026-07-01
 
 Elevated the homepage with tasteful, performance-safe interactivity:

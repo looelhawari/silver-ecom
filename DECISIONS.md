@@ -2,6 +2,34 @@
 
 Architecture decisions, most recent first.
 
+## ADR-014 — Sanctum token auth for the storefront
+**2026-07-01.** The Next.js SPA and Laravel API run on different origins/ports, which
+makes Sanctum's stateful **cookie** SPA flow (CSRF + same-site) fragile. We use
+**bearer tokens** instead: register/login return a token stored in localStorage
+(`lib/auth-token.ts`), attached by `apiFetch`; `auth:sanctum` guards account routes.
+CORS is still restricted to the frontend origin (credentials-aware) for defense in depth.
+
+## ADR-013 — Homepage animation strategy (interactive but light)
+**2026-07-01.** All homepage motion is transform/opacity only (GPU); interactive bits
+(cursor tilt, card spotlight, scroll-progress) write directly to the DOM with **no
+per-frame React re-renders**; count-up uses IntersectionObserver + one rAF; typing is a
+single timer. No animation library beyond `motion`.
+**Reduced-motion tradeoff:** the first version fully disabled motion under
+`prefers-reduced-motion`, which made the page look static for users with that OS setting.
+We now **calm only the large ambient effects** (aurora/shine/hero-zoom) and keep the
+subtle brand motion (marquee, caret, typing) running. To restore strict WCAG honoring,
+re-add those selectors to the reduced-motion block in `globals.css`.
+
+## ADR-012 — Luxury homepage: config-driven content + placeholder imagery
+**2026-07-01.** The homepage is composed of ~17 reusable section components; editorial
+content lives in `frontend/src/config/homepageData.ts` (API-ready) while featured
+products come from the live `/home` endpoint. Imagery uses LoremFlickr keyword
+placeholders (stable `lock`) — replace with real photography for production. This keeps
+components dumb and content swappable.
+
+> Note: ADR-010's "deferred" items (payment-proof upload/review, in-app quote
+> accept/reject, convert-to-order, customer auth) were all implemented in Phases 5–7.
+
 ## ADR-011 — Client cart + server-authoritative checkout
 **2026-07-01.** The cart lives client-side (Zustand, localStorage) for speed, but it
 is never trusted for money. At checkout the client sends only `{product_id, variant_id,

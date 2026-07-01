@@ -8,29 +8,31 @@ module's implementation phase (no empty scaffolding).
 
 ## Module map
 
-| Module | API prefix | Responsibility | Key planned tables |
-|--------|-----------|----------------|--------------------|
-| **Core** | `/api/v1` | Health check, shared kernel | — |
-| **AccessControl** | — | Roles & permissions (Spatie); 5 admin roles | roles, permissions |
-| **Auth** | — | Sanctum register/login/logout/me, password reset | personal_access_tokens |
-| **Users** | — | Customer & admin accounts, profiles, addresses, admin notes | users, user_addresses |
-| **Catalog** | — | Products, categories, silver types, variants, images, **pricing engine** | products, product_images, product_variants, categories, silver_types |
-| **Cart** | — | Server-validated cart (guest + user) | carts, cart_items |
-| **Checkout** | — | Checkout validation & order placement (orchestrator) | — |
-| **Orders** | — | Orders, items, status history, invoices | orders, order_items, order_status_history |
-| **Payments** | — | Manual methods (COD/Vodafone Cash/InstaPay/bank), proof review | payment_methods, payment_proofs |
-| **Shipping** | — | Address, manual cost, status, tracking | shipping_addresses |
-| **CustomOrders** | — | Custom silver requests, images, quotes, convert-to-order | custom_order_requests, custom_order_images, custom_order_quotes |
-| **Wishlist** *(optional)* | — | Customer wishlist | wishlists, wishlist_items |
-| **Content** | — | Banners, homepage sections, pages, FAQ, footer links | pages, faqs, banners, homepage_sections |
-| **Support** | — | Contact/support messages | support_messages |
-| **Media** | — | Shared secure file upload/storage service | media *(optional)* |
-| **AuditLogs** | — | Append-only admin action audit trail | audit_logs |
-| **Settings** | `/api/v1/storefront` | Store/SEO/theme/payment/shipping settings, feature flags | settings, *_settings |
+Public API routes live at `/api/v1/*`; `auth` and `storefront` are sub-prefixes.
+`—` = no HTTP routes (admin-only via Filament, or a shared service).
 
-A `—` API prefix means the module has no public routes yet; they are added in its
-phase. Only **Core** (`/api/v1/health`) and **Settings**
-(`/api/v1/storefront/config`) expose routes in Phase 1.
+| Module | API routes | Responsibility | Key tables |
+|--------|-----------|----------------|-----------|
+| **Core** | `/health` | Health check, shared kernel | — |
+| **AccessControl** | — | Roles & permissions (Spatie); 5 admin roles | roles, permissions |
+| **Auth** | `/auth/*` | Register/login/logout/me, forgot/reset password | personal_access_tokens |
+| **Users** | `/profile*`, `/addresses*` | Accounts, profile, addresses, admin notes | users, user_addresses, user_admin_notes |
+| **Catalog** | `/products*`, `/categories*`, `/silver-types`, `/home` | Products, categories, silver types, variants, images, **pricing engine** | products, product_images, product_variants, categories, silver_types |
+| **Cart** | — (client cart) | Cart models for future server carts | carts, cart_items |
+| **Checkout** | `/checkout/*`, `/payment-methods` | Server-side totals & order placement | — |
+| **Orders** | `/orders/track`, `/orders/{code}/payment-proof` | Orders, items, status history, invoices | orders, order_items, order_status_history |
+| **Payments** | (via Orders/Checkout) | Manual methods (COD/Vodafone Cash/InstaPay/bank), proof review | payment_methods, payment_proofs |
+| **Shipping** | — | Address, manual cost, status, tracking | shipping_addresses |
+| **CustomOrders** | `/custom-requests*` | Custom requests, images, quotes, convert-to-order | custom_order_requests, custom_order_images, custom_order_quotes |
+| **Wishlist** | `/wishlist*` | Customer wishlist | wishlist_items |
+| **Content** | `/pages/{slug}`, `/faqs` | Banners, pages, FAQ | pages, faqs, banners |
+| **Support** | `/contact` | Contact/support messages | support_messages |
+| **Media** | — | Shared secure file upload/storage service | (uses disks) |
+| **AuditLogs** | — | Append-only admin action audit trail | audit_logs |
+| **Settings** | `/storefront/config` | Store/SEO/theme/payment settings, feature flags | settings, *_settings |
+
+See [API_DOCUMENTATION.md](API_DOCUMENTATION.md) for the full endpoint list and auth
+requirements. Homepage "sections" are driven by product flags + banners (no dedicated table).
 
 ## Boundary rules
 

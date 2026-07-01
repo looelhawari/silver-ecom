@@ -30,11 +30,19 @@ the operational overhead of true microservices.
   module declares a prefix. See [MODULES.md](MODULES.md).
 - **API:** versioned REST under `/api/v1`. Responses use Laravel API Resources;
   validation uses Form Requests; authorization uses Policies + Spatie permissions.
-- **Auth:** Laravel Sanctum (SPA cookie + token support). Admin uses Filament's
-  session guard; access is role-gated via `User::canAccessPanel()`.
-- **Admin:** Filament panel at `/admin`, primary brand color set to silver/slate.
-- **Pricing:** all money math is **server-side** (Catalog pricing engine + Checkout).
-  The client never sets prices or totals.
+- **Auth:** Laravel Sanctum **bearer tokens** for the storefront (register/login issue a
+  token; `auth:sanctum` guards account/profile/wishlist routes). The Filament admin uses
+  the session guard; access is role-gated via `User::canAccessPanel()`.
+- **Security:** CORS restricted to the frontend origin (credentials-aware, `config/cors.php`),
+  a global `SecurityHeaders` middleware, JSON errors for `/api/*`, and per-endpoint rate
+  limits. See [SECURITY.md](SECURITY.md).
+- **Admin:** Filament v4 panel at `/admin`, silver/slate theme; resources per domain plus
+  a Store Settings page; dashboard widgets (stats, recent orders, revenue chart).
+- **Pricing:** all money math is **server-side** — `Catalog\Services\PricingService`
+  (product prices, persisted by `ProductObserver`) and `Checkout\Services\CheckoutService`
+  (order totals, stock-checked in a transaction). The client never sets prices or totals.
+- **Auditing:** `AuditLogs\Services\AuditLogger` records product CRUD, gram-price and
+  order-status changes, settings updates, and admin logins.
 
 ### Request lifecycle (API)
 
@@ -47,21 +55,36 @@ the operational overhead of true microservices.
 
 ## Frontend
 
-- **Framework:** Next.js 16 App Router with React Server Components.
-  > Note: this Next.js build has non-standard conventions — see
-  > `frontend/AGENTS.md`. Consult `node_modules/next/dist/docs/` before adding
-  > framework-level code.
-- **Config-driven branding:** `src/config/*` (store, theme, navigation, footer,
-  SEO, features, integrations) mirrors the backend's `config/white_label.php`, so
-  the storefront is white-label and rebrandable without code changes.
-- **State:** TanStack Query for server state; Zustand for light UI state (cart
-  drawer, counts).
-- **Data access:** `src/lib/api.ts` is a typed fetch wrapper (JSON, Sanctum
-  credentials, typed errors).
-- **i18n / RTL:** next-intl with `en` (LTR) and `ar` (RTL); `dir` derives from
-  the active locale.
-- **Theme:** CSS variables in `globals.css` driven by the active preset
-  (`silver-luxury`): pearl base, charcoal text, champagne accent.
+- **Framework:** Next.js 16 App Router.
+  > This Next.js build has non-standard conventions — see `frontend/AGENTS.md` and
+  > `node_modules/next/dist/docs/`. Notably `params`/`searchParams` are Promises.
+- **Rendering split:** content/listing/detail routes are **server components**
+  (SEO + `generateMetadata`, data fetched server-side); interactive routes
+  (cart, checkout, account, shop filters, homepage motion) are **client components**.
+- **Structure:** `src/app` (routes + sitemap/robots), `src/components/{layout,home,
+  storefront,ui,providers}`, `src/config` (white-label + `homepageData`), `src/lib`
+  (`api.ts`, `auth-token.ts`, `format.ts`), `src/stores` (Zustand), `src/types`,
+  `src/i18n` + `src/messages`. Full map in [frontend/README.md](frontend/README.md).
+- **Data access:** everything goes through `src/lib/api.ts` (`apiFetch`) — JSON,
+  `credentials: include`, attaches the bearer token, throws typed `ApiError`.
+- **Auth:** `stores/useAuthStore` (login/register/logout/me) + `lib/auth-token.ts`
+  (token in localStorage); `AppProviders` hydrates the session on boot.
+- **State:** TanStack Query for server state; Zustand for cart/auth/UI.
+- **Config-driven branding:** `src/config/*` mirrors the backend's
+  `config/white_label.php`, so the storefront is white-label without code changes.
+- **i18n / RTL:** next-intl with `en` (LTR) and `ar` (RTL); `dir` from the active locale.
+- **Theme + motion:** CSS variables in `globals.css` (active preset `silver-luxury`:
+  pearl / charcoal / champagne) plus GPU-only motion keyframes. Homepage animations
+  (typing, count-up, tilt, marquee, spotlight, scroll-progress) are lightweight and
+  `prefers-reduced-motion` aware — see [PERFORMANCE.md](PERFORMANCE.md).
+
+## Data flow (storefront example)
+
+1. A server page (`app/products/[slug]/page.tsx`) calls `apiFetch('/products/{slug}')`
+   and renders + `generateMetadata`.
+2. Interactive bits (add to cart, variant select, share) are client components.
+3. Cart lives client-side (Zustand); at checkout the client sends only ids+quantities,
+   and the server recomputes prices/totals (`CheckoutService`) before creating the order.
 
 ## Environments
 

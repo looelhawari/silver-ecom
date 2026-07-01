@@ -52,8 +52,12 @@ reveal a record (verified by tests). List endpoints return `{ data, meta }`.
 | POST | `/api/v1/auth/login` | none · throttled |
 | POST | `/api/v1/auth/logout` | token |
 | GET | `/api/v1/auth/me` | token |
+| POST | `/api/v1/auth/forgot-password` | none · throttled |
+| POST | `/api/v1/auth/reset-password` | none · throttled |
 
-Include `Authorization: Bearer <token>` on protected calls.
+Include `Authorization: Bearer <token>` on protected calls. Password-reset emails
+require a configured mail service (dev uses the `log` driver); the reset link targets
+the frontend `/reset-password`.
 
 **Account** (token):
 | Method | Path | Description |
@@ -72,11 +76,12 @@ Include `Authorization: Bearer <token>` on protected calls.
 | POST | `/api/v1/custom-requests/{code}/accept-quote` | Accept a sent quote |
 | POST | `/api/v1/custom-requests/{code}/reject-quote` | Decline a sent quote |
 
-## Still planned (later phases)
+## Still planned / optional
 
-- Forgot/reset password email flow (needs a mail service).
-- `GET /orders/{id}/invoice` (printable/PDF invoice).
-- Coupons.
+- Password-reset **email delivery** (endpoints exist; needs a mail service).
+- Server-generated **invoice PDF** (a printable invoice page is shipped at the
+  frontend `/order/invoice`).
+- Coupons; server-persisted cart endpoints (the storefront cart is client-side today).
 
 ## Conventions
 
