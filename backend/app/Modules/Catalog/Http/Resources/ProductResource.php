@@ -2,6 +2,8 @@
 
 namespace App\Modules\Catalog\Http\Resources;
 
+use App\Modules\Catalog\Models\Product;
+use App\Support\Localization\LocalizedFields;
 use App\Support\Media\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -9,12 +11,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * Full product shape for the detail page.
  *
- * @mixin \App\Modules\Catalog\Models\Product
+ * @mixin Product
  */
 class ProductResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $locale = LocalizedFields::locale($request);
         $images = $this->whenLoaded('images', fn () => $this->images
             ->map(fn ($img) => [
                 'id' => $img->id,
@@ -25,13 +28,16 @@ class ProductResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => LocalizedFields::value($this->resource, 'name', $locale),
+            'name_en' => $this->name_en ?? $this->name,
             'name_ar' => $this->name_ar,
             'slug' => $this->slug,
             'sku' => $this->sku,
-            'description' => $this->description,
+            'description' => LocalizedFields::value($this->resource, 'description', $locale),
+            'description_en' => $this->description_en ?? $this->description,
             'description_ar' => $this->description_ar,
-            'care_instructions' => $this->care_instructions,
+            'care_instructions' => LocalizedFields::value($this->resource, 'care_instructions', $locale),
+            'care_instructions_en' => $this->care_instructions_en ?? $this->care_instructions,
             'care_instructions_ar' => $this->care_instructions_ar,
             'price' => (float) $this->final_price,
             'currency' => config('white_label.store.currency', 'EGP'),
@@ -47,12 +53,16 @@ class ProductResource extends JsonResource
             'tags' => $this->tags ?? [],
             'category' => $this->whenLoaded('category', fn () => $this->category ? [
                 'id' => $this->category->id,
-                'name' => $this->category->name,
+                'name' => LocalizedFields::value($this->category, 'name', $locale),
+                'name_en' => $this->category->name_en ?? $this->category->name,
+                'name_ar' => $this->category->name_ar,
                 'slug' => $this->category->slug,
             ] : null),
             'silver_type' => $this->whenLoaded('silverType', fn () => $this->silverType ? [
                 'id' => $this->silverType->id,
-                'name' => $this->silverType->name,
+                'name' => LocalizedFields::value($this->silverType, 'name', $locale),
+                'name_en' => $this->silverType->name_en ?? $this->silverType->name,
+                'name_ar' => $this->silverType->name_ar,
                 'purity' => $this->silverType->purity,
             ] : null),
             'images' => $images,

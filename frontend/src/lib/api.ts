@@ -19,7 +19,7 @@ export class ApiError extends Error {
   }
 }
 
-type RequestOptions = Omit<RequestInit, "body"> & { body?: unknown };
+type RequestOptions = Omit<RequestInit, "body"> & { body?: unknown; locale?: string };
 
 /**
  * Thin fetch wrapper for the storefront API.
@@ -28,23 +28,33 @@ type RequestOptions = Omit<RequestInit, "body"> & { body?: unknown };
  */
 export async function apiFetch<T>(
   path: string,
-  { body, headers, ...init }: RequestOptions = {},
+  { body, headers, locale, ...init }: RequestOptions = {},
 ): Promise<T> {
   const url = path.startsWith("http")
     ? path
     : `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 
   const token = getToken();
+  const requestLocale =
+    locale ??
+    (typeof document !== "undefined" ? document.documentElement.lang : undefined);
+  const requestHeaders = new Headers(headers);
+
+  requestHeaders.set("Accept", requestHeaders.get("Accept") ?? "application/json");
+  if (body !== undefined) {
+    requestHeaders.set("Content-Type", requestHeaders.get("Content-Type") ?? "application/json");
+  }
+  if (token) {
+    requestHeaders.set("Authorization", `Bearer ${token}`);
+  }
+  if (requestLocale) {
+    requestHeaders.set("Accept-Language", requestLocale);
+  }
 
   const response = await fetch(url, {
     ...init,
     credentials: "include",
-    headers: {
-      Accept: "application/json",
-      ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
-    },
+    headers: requestHeaders,
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 

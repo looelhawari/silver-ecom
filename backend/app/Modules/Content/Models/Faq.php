@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Faq extends Model
 {
     protected $fillable = [
-        'question', 'question_ar', 'answer', 'answer_ar',
+        'question', 'question_en', 'question_ar', 'answer', 'answer_en', 'answer_ar',
         'group', 'sort_order', 'is_active',
     ];
 

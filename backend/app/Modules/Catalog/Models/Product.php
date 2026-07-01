@@ -13,14 +13,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Product extends Model
 {
     protected $fillable = [
-        'name', 'name_ar', 'slug', 'sku', 'category_id', 'silver_type_id',
-        'description', 'description_ar', 'care_instructions', 'care_instructions_ar',
+        'name', 'name_en', 'name_ar', 'slug', 'sku', 'category_id', 'silver_type_id',
+        'description', 'description_en', 'description_ar',
+        'care_instructions', 'care_instructions_en', 'care_instructions_ar',
         'weight_in_grams', 'stock_quantity',
         'pricing_type', 'fixed_price', 'gram_price_snapshot', 'workmanship_fee',
         'extra_markup', 'discount_amount', 'discount_percentage', 'manual_price_override',
         'final_price', 'show_workmanship_fee_publicly',
         'is_active', 'is_featured', 'is_best_seller',
-        'main_image_path', 'tags', 'seo_title', 'seo_description',
+        'main_image_path', 'tags', 'seo_title', 'seo_title_en', 'seo_title_ar',
+        'seo_description', 'seo_description_en', 'seo_description_ar',
     ];
 
     protected function casts(): array

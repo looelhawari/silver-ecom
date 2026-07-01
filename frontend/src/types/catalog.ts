@@ -1,6 +1,7 @@
 export type ProductListItem = {
   id: number;
   name: string;
+  name_en?: string | null;
   name_ar?: string | null;
   slug: string;
   price: number;
@@ -9,8 +10,8 @@ export type ProductListItem = {
   in_stock: boolean;
   is_featured: boolean;
   is_best_seller: boolean;
-  category?: string | null;
-  silver_type?: string | null;
+  category?: string | { id?: number; name: string; name_en?: string | null; name_ar?: string | null; slug?: string } | null;
+  silver_type?: string | { id?: number; name: string; name_en?: string | null; name_ar?: string | null; slug?: string; purity?: string | null } | null;
   image?: string | null;
 };
 
@@ -32,11 +33,16 @@ export type ProductImage = {
 export type ProductDetail = {
   id: number;
   name: string;
+  name_en?: string | null;
   name_ar?: string | null;
   slug: string;
   sku?: string | null;
   description?: string | null;
+  description_en?: string | null;
+  description_ar?: string | null;
   care_instructions?: string | null;
+  care_instructions_en?: string | null;
+  care_instructions_ar?: string | null;
   price: number;
   currency: string;
   weight_in_grams?: number | null;
@@ -46,8 +52,8 @@ export type ProductDetail = {
   is_featured: boolean;
   is_best_seller: boolean;
   tags: string[];
-  category?: { id: number; name: string; slug: string } | null;
-  silver_type?: { id: number; name: string; purity?: string | null } | null;
+  category?: { id: number; name: string; name_en?: string | null; name_ar?: string | null; slug: string } | null;
+  silver_type?: { id: number; name: string; name_en?: string | null; name_ar?: string | null; purity?: string | null } | null;
   images: ProductImage[];
   main_image?: string | null;
   variants: ProductVariant[];
@@ -56,8 +62,12 @@ export type ProductDetail = {
 export type Category = {
   id: number;
   name: string;
+  name_en?: string | null;
+  name_ar?: string | null;
   slug: string;
   description?: string | null;
+  description_en?: string | null;
+  description_ar?: string | null;
   image?: string | null;
   products_count?: number;
 };

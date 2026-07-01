@@ -54,6 +54,9 @@ MAIL_PASSWORD=<smtp-pass>
   security headers are set by the app.
 - On the frontend host set `NEXT_PUBLIC_API_URL=https://your-domain/api/v1` and
   `NEXT_PUBLIC_SITE_URL=https://your-frontend-domain`.
+- Public storefront URLs are locale-prefixed (`/en`, `/ar-EG`). Keep
+  `NEXT_PUBLIC_SITE_URL` canonical and make sure redirects/proxy rules do not strip
+  the locale segment. The API reads locale from `?locale` or `Accept-Language`.
 
 ### Nginx (backend)
 - Document root: `backend/public`

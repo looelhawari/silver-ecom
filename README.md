@@ -6,12 +6,13 @@ orders** from customer references.
 
 - **Frontend:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 ·
   shadcn/Radix · TanStack Query · Zustand · React Hook Form + Zod · Motion ·
-  next-intl (EN/AR, RTL-ready)
+  next-intl (`en`/`ar-EG`, RTL)
 - **Backend:** Laravel 13 · **MySQL** (SQLite for tests) · REST API ·
   Laravel Sanctum (token auth) · Filament v4 admin panel · Spatie Laravel Permission
 - **Currency:** EGP · **Timezone:** Africa/Cairo
-- **Status:** Phases 1–9 complete + luxury animated homepage. Backend
-  `php artisan test` → **20 passing / 94 assertions**; frontend build clean (29 routes).
+- **Status:** Phases 1–9 complete + luxury animated homepage + public-site
+  localization. Backend `php artisan test` → **21 passing / 101 assertions**;
+  frontend lint/build clean (locale-prefixed routes).
 
 > `Fidda` (فِضّة) is Arabic for *silver*. The brand name, contact details, theme and
 > all copy are configuration-driven — change them in `backend/.env` /
@@ -24,7 +25,7 @@ orders** from customer references.
 .
 ├── backend/    # Laravel 13 modular-monolith API + Filament admin
 │   └── app/Modules/   # business modules (see MODULES.md)
-├── frontend/   # Next.js 16 storefront (config-driven, i18n, RTL-ready)
+├── frontend/   # Next.js 16 storefront (config-driven, /en + /ar-EG)
 └── *.md        # living documentation (architecture, modules, security, …)
 ```
 
@@ -77,6 +78,18 @@ cp .env.example .env.local     # NEXT_PUBLIC_API_URL → backend API
 npm install                    # (node_modules already present in this repo)
 npm run dev                    # http://localhost:3000
 ```
+
+## Localization
+
+- Storefront pages live under `/en` and `/ar-EG`; root requests redirect through
+  next-intl middleware.
+- `ar-EG` renders `<html dir="rtl">`; `en` renders LTR. The language switcher
+  preserves the current path and query string.
+- API locale is resolved from `?locale=en|ar-EG` first, then `Accept-Language`;
+  unsupported values fall back to English.
+- API resources expose localized display fields plus raw `*_en` / `*_ar` fields
+  for future admin editing. The admin dashboard translation UX is deferred to
+  part two by request.
 
 ## Development model
 

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PaymentMethod extends Model
 {
     protected $fillable = [
-        'code', 'name', 'name_ar', 'instructions', 'instructions_ar',
+        'code', 'name', 'name_en', 'name_ar',
+        'instructions', 'instructions_en', 'instructions_ar',
         'account_details', 'requires_proof', 'is_active', 'sort_order',
     ];
 

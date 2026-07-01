@@ -1,15 +1,18 @@
 import { Plus } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 import { Reveal } from "@/components/home/reveal";
 import { SectionHeader } from "@/components/home/section-header";
-import { faqPreview } from "@/config/homepageData";
 
 export function FAQPreview() {
+  const t = useTranslations("homepage.faq");
+  const faqPreview = t.raw("items") as { question: string; answer: string }[];
+
   return (
     <section className="bg-[var(--background)]">
       <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-        <SectionHeader eyebrow="Good to know" title="Questions, answered" />
+        <SectionHeader eyebrow={t("eyebrow")} title={t("title")} />
 
         <Reveal className="mt-8 space-y-3">
           {faqPreview.map((faq) => (
@@ -28,7 +31,7 @@ export function FAQPreview() {
 
         <div className="mt-8 text-center">
           <Link href="/faq" className="text-sm font-semibold text-[var(--primary)] hover:underline">
-            View all FAQ →
+            {t("viewAll")} <span className="rtl-flip inline-block">-&gt;</span>
           </Link>
         </div>
       </div>

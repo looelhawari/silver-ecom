@@ -1,10 +1,12 @@
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 import type { Collection } from "@/config/homepageData";
 
 export function CollectionTile({ collection }: { collection: Collection }) {
+  const t = useTranslations("common");
   const large = collection.size === "large";
 
   return (
@@ -16,7 +18,7 @@ export function CollectionTile({ collection }: { collection: Collection }) {
     >
       <Image
         src={collection.image}
-        alt={`${collection.name} silver collection`}
+        alt={collection.name}
         fill
         sizes={large ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -27,8 +29,8 @@ export function CollectionTile({ collection }: { collection: Collection }) {
           {collection.name}
         </h3>
         <p className="mt-1 max-w-sm text-sm text-white/80">{collection.description}</p>
-        <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
-          Discover <ArrowUpRight className="h-3.5 w-3.5" />
+        <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-normal text-[var(--accent)]">
+          {t("discover")} <ArrowUpRight className="rtl-flip h-3.5 w-3.5" />
         </span>
       </div>
     </Link>

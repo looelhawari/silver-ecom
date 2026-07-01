@@ -40,7 +40,8 @@ requirements. Homepage "sections" are driven by product flags + banners (no dedi
    reach it only through that module's Services/Actions or events.
 2. **No cross-module model reach-ins** from controllers — go through the public
    service layer.
-3. **Cross-cutting services:** file storage → `Media`; audit trail → `AuditLogs`.
+3. **Cross-cutting services:** file storage → `Media`; audit trail → `AuditLogs`;
+   localized display fields/statuses → `App\Support\Localization`.
 4. **Money is server-side only** — `Catalog` computes product prices, `Checkout`
    computes order totals; the client is never trusted.
 5. **Routes are auto-registered** by `ModuleServiceProvider` from each module's

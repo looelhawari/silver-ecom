@@ -32,8 +32,10 @@ export function TypingText({
     if (!deleting && text === current) {
       timeout = setTimeout(() => setDeleting(true), pause);
     } else if (deleting && text === "") {
-      setDeleting(false);
-      setIndex((v) => (v + 1) % phrases.length);
+      timeout = setTimeout(() => {
+        setDeleting(false);
+        setIndex((v) => (v + 1) % phrases.length);
+      }, deletingSpeed);
     } else {
       const next = deleting
         ? current.slice(0, text.length - 1)

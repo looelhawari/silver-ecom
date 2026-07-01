@@ -2,6 +2,9 @@
 
 namespace App\Modules\CustomOrders\Http\Resources;
 
+use App\Modules\CustomOrders\Models\CustomOrderRequest;
+use App\Support\Localization\LocalizedFields;
+use App\Support\Localization\LocalizedStatusLabels;
 use App\Support\Media\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -10,20 +13,23 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Customer-facing custom request shape (submission + tracking).
  * Exposes the customer-visible quote/message, never internal admin notes.
  *
- * @mixin \App\Modules\CustomOrders\Models\CustomOrderRequest
+ * @mixin CustomOrderRequest
  */
 class CustomOrderRequestResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $locale = LocalizedFields::locale($request);
         $quote = $this->whenLoaded('quote', fn () => $this->quote);
 
         return [
             'request_code' => $this->request_code,
             'name' => $this->name,
             'description' => $this->description,
-            'status' => ['value' => $this->status->value, 'label' => $this->status->label()],
-            'silver_type' => $this->whenLoaded('silverType', fn () => $this->silverType?->name),
+            'status' => LocalizedStatusLabels::status('custom', $this->status->value, $locale),
+            'silver_type' => $this->whenLoaded('silverType', fn () => $this->silverType
+                ? LocalizedFields::value($this->silverType, 'name', $locale)
+                : null),
             'expected_weight_grams' => $this->expected_weight_grams ? (float) $this->expected_weight_grams : null,
             'size' => $this->size,
             'customer_message' => $this->customer_message,

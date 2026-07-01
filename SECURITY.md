@@ -22,6 +22,9 @@ the per-phase checklist. A dedicated hardening pass happens in **Phase 8**.
   (`MediaService`).
 - **Rate limits:** login, register, forgot/reset, contact, checkout, order &
   custom-request tracking, payment-proof, custom submission.
+- **Locale validation:** API locale is resolved only from the allowlist (`en`,
+  `ar-EG`) via `?locale` or `Accept-Language`; unsupported values fall back to
+  English and never influence file paths or dynamic imports.
 - **Errors:** `/api/*` always returns JSON; production runs with `APP_DEBUG=false`.
 - **Audit trail:** order status changes and admin actions recorded to `audit_logs`.
 

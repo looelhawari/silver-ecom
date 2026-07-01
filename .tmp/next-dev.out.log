@@ -1,0 +1,18 @@
+
+> frontend@0.1.0 dev
+> next dev --port 3000
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://169.254.228.159:3000
+- Environments: .env.local
+✓ Ready in 3.5s
+Creating turbopack project { dir: 'D:\\white e comm\\frontend', testMode: true }
+
+○ Compiling /[locale] ...
+ GET /en 200 in 19.8s (next.js: 12.8s, proxy.ts: 105ms, generate-params: 797ms, application-code: 6.9s)
+ GET /en 200 in 7.6s (next.js: 1077ms, proxy.ts: 10ms, generate-params: 1063ms, application-code: 6.5s)
+ GET /ar-EG 200 in 3.1s (next.js: 46ms, proxy.ts: 12ms, generate-params: 27ms, application-code: 3.0s)
+ GET /ar-EG 200 in 1737ms (next.js: 35ms, proxy.ts: 10ms, generate-params: 23ms, application-code: 1691ms)
+ GET /ar-EG/faq 200 in 4.0s (next.js: 2.7s, proxy.ts: 7ms, generate-params: 1079ms, application-code: 1283ms)
+ GET /ar-EG/shop 200 in 3.6s (next.js: 3.5s, proxy.ts: 8ms, generate-params: 1455ms, application-code: 112ms)

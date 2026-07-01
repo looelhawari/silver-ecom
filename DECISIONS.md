@@ -2,6 +2,14 @@
 
 Architecture decisions, most recent first.
 
+## ADR-015 — Public localization before admin translation UI
+**2026-07-01.** The user explicitly asked to translate the public website now and
+leave the admin dashboard for part two. We implemented locale-prefixed storefront
+routes (`/en`, `/ar-EG`), Arabic RTL rendering, API locale resolution, localized
+resources/status labels, and explicit `*_en` / `*_ar` schema fields with English
+fallbacks. The Filament editing UX for bilingual fields remains deferred so this
+phase does not accidentally become an admin-dashboard rebuild.
+
 ## ADR-014 — Sanctum token auth for the storefront
 **2026-07-01.** The Next.js SPA and Laravel API run on different origins/ports, which
 makes Sanctum's stateful **cookie** SPA flow (CSRF + same-site) fragile. We use

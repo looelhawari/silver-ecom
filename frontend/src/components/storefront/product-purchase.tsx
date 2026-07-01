@@ -1,48 +1,56 @@
 "use client";
 
 import { Heart, Minus, Plus, Share2, ShoppingBag } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 import { apiFetch } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
+import { localizedField } from "@/lib/locale";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useCartStore } from "@/stores/useCartStore";
 import type { ProductDetail } from "@/types/catalog";
 
 export function ProductPurchase({ product }: { product: ProductDetail }) {
   const router = useRouter();
+  const locale = useLocale() as Locale;
+  const t = useTranslations("product");
+  const common = useTranslations("common");
   const add = useCartStore((s) => s.add);
   const user = useAuthStore((s) => s.user);
   const [quantity, setQuantity] = useState(1);
   const [variantId, setVariantId] = useState<number | null>(product.variants[0]?.id ?? null);
 
+  const name = localizedField(product, "name", locale);
+
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
-        await navigator.share({ title: product.name, url });
+        await navigator.share({ title: name, url });
       } catch {
         // user cancelled
       }
     } else if (typeof navigator !== "undefined" && navigator.clipboard) {
       await navigator.clipboard.writeText(url);
-      toast.success("Link copied to clipboard");
+      toast.success(common("copied"));
     }
   };
 
   const addToWishlist = async () => {
     if (!user) {
-      toast.error("Sign in to save to your wishlist.");
+      toast.error(t("wishlistSignIn"));
       return router.push("/login");
     }
     try {
       await apiFetch(`/wishlist/${product.id}`, { method: "POST" });
-      toast.success("Saved to wishlist");
+      toast.success(t("savedWishlist"));
     } catch {
-      toast.error("Could not update wishlist.");
+      toast.error(t("wishlistError"));
     }
   };
 
@@ -54,7 +62,7 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
       {
         productId: product.id,
         slug: product.slug,
-        name: product.name,
+        name,
         price: unitPrice,
         image: product.main_image ?? product.images[0]?.url ?? null,
         variantId: variant?.id ?? null,
@@ -62,12 +70,12 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
       },
       quantity,
     );
-    toast.success(`${product.name} added to cart`);
+    toast.success(t("addedToCart", { name }));
   };
 
   return (
     <div className="space-y-5">
-      <div className="font-serif text-3xl font-semibold">{formatPrice(unitPrice, product.currency)}</div>
+      <div className="font-serif text-3xl font-semibold">{formatPrice(unitPrice, product.currency, locale)}</div>
 
       {product.variants.length > 0 && (
         <div>
@@ -93,22 +101,22 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
 
       <div className="flex items-center gap-4">
         <div className="flex items-center rounded-lg border border-[var(--border)]">
-          <button type="button" className="px-3 py-2" onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Decrease">
+          <button type="button" className="px-3 py-2" onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label={common("decrease")}>
             <Minus className="h-4 w-4" />
           </button>
           <span className="w-10 text-center text-sm">{quantity}</span>
-          <button type="button" className="px-3 py-2" onClick={() => setQuantity((q) => q + 1)} aria-label="Increase">
+          <button type="button" className="px-3 py-2" onClick={() => setQuantity((q) => q + 1)} aria-label={common("increase")}>
             <Plus className="h-4 w-4" />
           </button>
         </div>
         <span className={`text-sm ${product.in_stock ? "text-[var(--muted-foreground)]" : "text-red-600"}`}>
-          {product.in_stock ? `In stock (${product.stock_quantity})` : "Out of stock"}
+          {product.in_stock ? t("inStock", { count: product.stock_quantity }) : t("outOfStock")}
         </span>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button size="lg" className="flex-1" disabled={!product.in_stock} onClick={addToCart}>
-          <ShoppingBag className="h-4 w-4" /> Add to cart
+          <ShoppingBag className="h-4 w-4" /> {t("addToCart")}
         </Button>
         <Button
           size="lg"
@@ -120,12 +128,12 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
             router.push("/checkout");
           }}
         >
-          Buy now
+          {t("buyNow")}
         </Button>
-        <Button size="lg" variant="outline" aria-label="Add to wishlist" onClick={addToWishlist}>
+        <Button size="lg" variant="outline" aria-label={t("wishlist")} onClick={addToWishlist}>
           <Heart className="h-4 w-4" />
         </Button>
-        <Button size="lg" variant="outline" aria-label="Share" onClick={share}>
+        <Button size="lg" variant="outline" aria-label={t("share")} onClick={share}>
           <Share2 className="h-4 w-4" />
         </Button>
       </div>

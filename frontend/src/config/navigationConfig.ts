@@ -1,12 +1,12 @@
 import type { NavigationItem } from "@/types/commerce";
 
 export const primaryNavigation: NavigationItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Shop", href: "/shop" },
-  { label: "Custom Order", href: "/custom-order" },
-  { label: "Track Order", href: "/track-order" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Home", key: "home", href: "/" },
+  { label: "Shop", key: "shop", href: "/shop" },
+  { label: "Custom Order", key: "customOrder", href: "/custom-order" },
+  { label: "Track Order", key: "trackOrder", href: "/track-order" },
+  { label: "About", key: "about", href: "/about" },
+  { label: "Contact", key: "contact", href: "/contact" },
 ];
 
 /** Storefront jewelry categories shown on the home page (mirrors seeded categories). */

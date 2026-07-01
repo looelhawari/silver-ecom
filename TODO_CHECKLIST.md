@@ -102,7 +102,19 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
 
 ---
 
-**Status: all planned phases complete + homepage redesign.** Remaining
-optional/deferred: coupons, invoice **PDF** (printable page shipped), password-reset
-**email delivery** (needs mail creds), full **Arabic UI** translation (schema + i18n
-scaffolding ready).
+## Localization Phase — Public Website  ✅ complete
+- [x] Locale-prefixed routes: `/en` and `/ar-EG`
+- [x] next-intl request config, middleware/proxy routing, language switcher
+- [x] RTL/LTR document direction and Arabic message catalog
+- [x] Customer-facing storefront translated (home, shop, product, cart, checkout,
+      auth/account, tracking, custom orders, content pages, success/invoice)
+- [x] API locale resolution via `?locale` / `Accept-Language`
+- [x] Backend localized fields/status labels with English fallback
+- [x] Non-destructive migration for `*_en`/`*_ar` content columns
+- [x] Docs updated; tests/build verified
+- [ ] Admin dashboard translation/editing UX (deferred to part two by user request)
+
+**Status: all planned phases complete + homepage redesign + public localization.**
+Remaining optional/deferred: coupons, invoice **PDF** (printable page shipped),
+password-reset **email delivery** (needs mail creds), admin dashboard translation
+editing UX.

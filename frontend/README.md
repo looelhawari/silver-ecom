@@ -18,13 +18,17 @@ npm run dev                     # http://localhost:3000  (backend must be runnin
 ```
 
 ## Routes (`src/app`)
-Storefront: `/` (luxury homepage), `/shop`, `/category/[slug]`, `/products/[slug]`,
-`/cart`, `/checkout`, `/order/success`, `/order/invoice` (printable), `/track-order`,
-`/custom-order`, `/track-custom`.
-Account: `/login`, `/register`, `/forgot-password`, `/reset-password`, `/account`,
-`/account/orders`, `/account/requests`, `/wishlist`.
-Content: `/about`, `/contact`, `/faq`, `/privacy-policy`, `/terms`, `/returns-policy`,
-`/silver-care`.
+All customer pages are prefixed by locale: `/en/...` and `/ar-EG/...`.
+Storefront: `/[locale]` (luxury homepage), `/[locale]/shop`, `/[locale]/category/[slug]`,
+`/[locale]/products/[slug]`, `/[locale]/cart`, `/[locale]/checkout`,
+`/[locale]/order/success`, `/[locale]/order/invoice` (printable),
+`/[locale]/track-order`, `/[locale]/custom-order`, `/[locale]/track-custom`.
+Account: `/[locale]/login`, `/[locale]/register`, `/[locale]/forgot-password`,
+`/[locale]/reset-password`, `/[locale]/account`, `/[locale]/account/orders`,
+`/[locale]/account/requests`, `/[locale]/wishlist`.
+Content: `/[locale]/about`, `/[locale]/contact`, `/[locale]/faq`,
+`/[locale]/privacy-policy`, `/[locale]/terms`, `/[locale]/returns-policy`,
+`/[locale]/silver-care`.
 Infra: `sitemap.ts`, `robots.ts`, `not-found.tsx`, `error.tsx`, `loading.tsx`.
 
 Rendering: content/listing/detail pages are **server components** (SEO, `generateMetadata`);
@@ -44,7 +48,7 @@ src/
 │   ├── providers/          # app-providers (QueryClient, Toaster, auth hydrate)
 │   └── ui/                 # button (shadcn)
 ├── config/                 # white-label config + homepageData (see below)
-├── i18n/ · messages/       # next-intl routing + en/ar catalogs
+├── i18n/ · messages/       # next-intl routing + en/ar-EG catalogs
 ├── lib/                    # api.ts, auth-token.ts, format.ts, utils.ts
 ├── stores/                 # useCartStore, useAuthStore, useStorefrontStore (Zustand)
 └── types/                  # commerce.ts, catalog.ts
@@ -75,7 +79,16 @@ come from the live `/home` API. Placeholder imagery is LoremFlickr — swap for 
 | `config/featureFlags.ts` | wishlist, custom orders, guest checkout, order tracking |
 | `config/homepageData.ts` | Homepage editorial content |
 | `app/globals.css` | Theme CSS variables + motion keyframes |
-| `messages/{en,ar}.json` | i18n strings |
+| `messages/{en,ar-EG}.json` | i18n strings |
+
+## Localization
+- `src/i18n/routing.ts` defines `en` and `ar-EG` with `localePrefix: "always"`.
+- `src/app/[locale]/layout.tsx` sets `<html lang>` and `dir`; Arabic uses RTL.
+- `components/language/language-switcher.tsx` preserves the active path/query.
+- `lib/api.ts` sends the active locale as `Accept-Language`; API callers can also
+  use `?locale=en|ar-EG`.
+- Product/category/CMS helpers use `localizedField` so missing Arabic content
+  falls back to English.
 
 ## Data & auth
 - **`lib/api.ts`** — typed `apiFetch` wrapper: JSON, `credentials: include`, attaches the

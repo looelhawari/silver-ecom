@@ -70,12 +70,15 @@ export type FeatureFlags = {
 
 export type NavigationItem = {
   label: string;
+  key?: string;
+  labelKey?: string;
   href: string;
   enabled?: boolean;
 };
 
 export type FooterSection = {
   title: string;
+  titleKey: string;
   links: NavigationItem[];
 };
 

@@ -7,8 +7,8 @@
  * Phase 1 uses an elegant system stack with a serif fallback for headings.
  */
 :root {
-  --app-font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
-  --app-font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --app-font-sans: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --app-font-serif: Georgia, "Times New Roman", serif;
   --app-font-mono: "Courier New", Courier, monospace;
 
   --background: #f8f8f6;
@@ -41,6 +41,14 @@ body {
   color: var(--foreground);
   font-family: var(--app-font-sans);
   letter-spacing: 0;
+}
+
+[dir="rtl"] body {
+  text-align: right;
+}
+
+[dir="rtl"] .marquee-track {
+  animation-direction: reverse;
 }
 
 h1,

@@ -16,7 +16,7 @@ export function SectionHeader({
   return (
     <Reveal className={`flex max-w-2xl flex-col gap-3 ${alignment}`}>
       {eyebrow && (
-        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+        <span className="text-xs font-semibold uppercase tracking-normal text-[var(--accent)]">
           {eyebrow}
         </span>
       )}

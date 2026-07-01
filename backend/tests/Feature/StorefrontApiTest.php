@@ -38,6 +38,36 @@ class StorefrontApiTest extends TestCase
             ->assertJsonStructure(['data' => ['id', 'name', 'price', 'variants', 'images'], 'meta' => ['related']]);
     }
 
+    public function test_accept_language_localizes_catalog_and_status_labels(): void
+    {
+        $product = Product::first();
+        $product->update(['name_ar' => 'خاتم فضة']);
+
+        $this->withHeader('Accept-Language', 'ar-EG')
+            ->getJson("/api/v1/products/{$product->slug}")
+            ->assertOk()
+            ->assertJsonPath('data.name', 'خاتم فضة')
+            ->assertJsonPath('data.name_en', $product->name);
+
+        $method = PaymentMethod::where('code', 'cod')->first();
+        $code = $this->postJson('/api/v1/checkout/place-order', [
+            'items' => [['product_id' => $product->id, 'quantity' => 1]],
+            'customer_name' => 'Test Buyer',
+            'customer_phone' => '01000000000',
+            'payment_method_id' => $method->id,
+            'shipping_address' => [
+                'full_name' => 'Test Buyer', 'phone' => '01000000000',
+                'city' => 'Cairo', 'address_line' => '1 Nile St',
+            ],
+        ])->assertCreated()->json('data.order_code');
+
+        $this->withHeader('Accept-Language', 'ar-EG')
+            ->postJson('/api/v1/orders/track', ['order_code' => $code, 'phone' => '01000000000'])
+            ->assertOk()
+            ->assertJsonPath('data.status.label', 'قيد الانتظار')
+            ->assertJsonPath('data.status.label_en', 'Pending');
+    }
+
     public function test_checkout_validate_computes_totals_server_side(): void
     {
         $product = Product::first();

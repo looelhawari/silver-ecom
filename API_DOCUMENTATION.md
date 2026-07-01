@@ -5,6 +5,16 @@
 - **Auth:** Laravel Sanctum (SPA cookie session and/or bearer tokens).
 - **Versioning:** path-based (`/api/v1`). Module routes auto-register under their
   prefix (see [MODULES.md](MODULES.md)).
+- **Locale:** pass `?locale=en|ar-EG` or `Accept-Language: en|ar-EG`. Query
+  string wins; unsupported values fall back to English.
+
+## Localization response contract
+
+Catalog, content, payment-method, order and custom-request resources return
+localized display fields (`name`, `description`, `title`, `body`, `label`) based on
+the resolved locale. They also expose raw fields such as `name_en`, `name_ar`,
+`description_en`, `description_ar`, `label_en`, and `label_ar` so the future admin
+dashboard can edit bilingual content without changing public API contracts.
 
 ## Available now (Phases 1–4)
 
@@ -35,6 +45,10 @@
 ```bash
 curl http://localhost:8000/api/v1/health
 curl "http://localhost:8000/api/v1/products?sort=price_asc&category=rings"
+curl "http://localhost:8000/api/v1/products?locale=ar-EG" -H "Accept: application/json"
+curl -X POST "http://localhost:8000/api/v1/orders/track" \
+  -H "Accept: application/json" -H "Accept-Language: ar-EG" \
+  -d '{"order_code":"FS-260701-ABCDE","phone":"01000000000"}'
 curl -X POST http://localhost:8000/api/v1/checkout/validate \
   -H "Content-Type: application/json" -H "Accept: application/json" \
   -d '{"items":[{"product_id":1,"quantity":2}]}'

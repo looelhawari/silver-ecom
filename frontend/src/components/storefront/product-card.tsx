@@ -2,21 +2,32 @@
 
 import { Gem, ShoppingBag } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import type { Locale } from "@/i18n/routing";
 import { formatPrice } from "@/lib/format";
+import { localizedField } from "@/lib/locale";
 import { useCartStore } from "@/stores/useCartStore";
 import type { ProductListItem } from "@/types/catalog";
 
 export function ProductCard({ product }: { product: ProductListItem }) {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("product");
+  const common = useTranslations("common");
   const add = useCartStore((s) => s.add);
+  const name = localizedField(product, "name", locale);
+  const silverType =
+    typeof product.silver_type === "string"
+      ? product.silver_type
+      : localizedField(product.silver_type, "name", locale);
 
   const badge = product.is_best_seller
-    ? { label: "Best seller", tone: "bg-[var(--accent)] text-white" }
+    ? { label: t("bestSeller"), tone: "bg-[var(--accent)] text-white" }
     : product.is_featured
-      ? { label: "Featured", tone: "bg-[var(--foreground)] text-white" }
+      ? { label: t("featured"), tone: "bg-[var(--foreground)] text-white" }
       : null;
 
   return (
@@ -25,7 +36,7 @@ export function ProductCard({ product }: { product: ProductListItem }) {
         {product.image ? (
           <Image
             src={product.image}
-            alt={product.name}
+            alt={name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -42,37 +53,37 @@ export function ProductCard({ product }: { product: ProductListItem }) {
         )}
         {!product.in_stock && (
           <span className="absolute right-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-xs font-medium text-white">
-            Out of stock
+            {t("outOfStock")}
           </span>
         )}
       </Link>
 
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center gap-2 text-xs text-[var(--muted-foreground)]">
-          {product.silver_type && <span>{product.silver_type}</span>}
-          {product.weight_in_grams ? <span>· {product.weight_in_grams} g</span> : null}
+          {silverType && <span>{silverType}</span>}
+          {product.weight_in_grams ? <span>· {product.weight_in_grams} {common("grams")}</span> : null}
         </div>
         <Link href={`/products/${product.slug}`} className="mt-1 line-clamp-2 font-medium hover:text-[var(--primary)]">
-          {product.name}
+          {name}
         </Link>
         <div className="mt-auto flex items-center justify-between pt-3">
           <span className="font-serif text-lg font-semibold">
-            {formatPrice(product.price, product.currency)}
+            {formatPrice(product.price, product.currency, locale)}
           </span>
           <Button
             size="icon"
             variant="secondary"
-            aria-label="Add to cart"
+            aria-label={t("addToCart")}
             disabled={!product.in_stock}
             onClick={() => {
               add({
                 productId: product.id,
                 slug: product.slug,
-                name: product.name,
+                name,
                 price: product.price,
                 image: product.image ?? null,
               });
-              toast.success(`${product.name} added to cart`);
+              toast.success(t("addedToCart", { name }));
             }}
           >
             <ShoppingBag className="h-4 w-4" />

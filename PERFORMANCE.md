@@ -22,6 +22,9 @@
 - **TanStack Query** caching (`staleTime` 60s, no refetch on focus).
 - Route-level code splitting via the App Router; static prerender where the route has
   no per-request data.
+- **Locale splitting:** next-intl loads only the active message catalog (`en` or
+  `ar-EG`) per request; the language switcher preserves the current URL without
+  fetching both languages.
 
 ## Homepage animation performance (interactive but light)
 - **No animation library beyond `motion`** (already used) + plain CSS keyframes.
@@ -38,6 +41,7 @@
 - No layout shift: the hero SSRs the first typed phrase; counters start at a stable value.
 
 ## Current status
-- Frontend `npm run build`: ✓ clean, TypeScript ✓, **29 routes** (static where possible).
-- Backend `php artisan test`: ✓ 20 passed / 94 assertions.
+- Frontend `npm run lint`: ✓ clean.
+- Frontend `npm run build`: ✓ clean, TypeScript ✓, locale-prefixed routes.
+- Backend `php artisan test`: ✓ 21 passed / 101 assertions.
 - SEO: dynamic `sitemap.xml` + `robots.txt`, per-route metadata, single H1 on the homepage.

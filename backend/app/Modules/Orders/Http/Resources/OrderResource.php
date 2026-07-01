@@ -2,23 +2,28 @@
 
 namespace App\Modules\Orders\Http\Resources;
 
+use App\Modules\Orders\Models\Order;
+use App\Support\Localization\LocalizedFields;
+use App\Support\Localization\LocalizedStatusLabels;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Customer-facing order shape (tracking + account). Never exposes admin_notes.
  *
- * @mixin \App\Modules\Orders\Models\Order
+ * @mixin Order
  */
 class OrderResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $locale = LocalizedFields::locale($request);
+
         return [
             'order_code' => $this->order_code,
-            'status' => ['value' => $this->status->value, 'label' => $this->status->label()],
-            'payment_status' => ['value' => $this->payment_status->value, 'label' => $this->payment_status->label()],
-            'shipping_status' => ['value' => $this->shipping_status->value, 'label' => $this->shipping_status->label()],
+            'status' => LocalizedStatusLabels::status('order', $this->status->value, $locale),
+            'payment_status' => LocalizedStatusLabels::status('payment', $this->payment_status->value, $locale),
+            'shipping_status' => LocalizedStatusLabels::status('shipping', $this->shipping_status->value, $locale),
             'subtotal' => (float) $this->subtotal,
             'shipping_cost' => (float) $this->shipping_cost,
             'discount_total' => (float) $this->discount_total,
@@ -31,8 +36,12 @@ class OrderResource extends JsonResource
             'placed_at' => $this->placed_at?->toIso8601String(),
             'payment_method' => $this->whenLoaded('paymentMethod', fn () => $this->paymentMethod ? [
                 'code' => $this->paymentMethod->code,
-                'name' => $this->paymentMethod->name,
-                'instructions' => $this->paymentMethod->instructions,
+                'name' => LocalizedFields::value($this->paymentMethod, 'name', $locale),
+                'name_en' => $this->paymentMethod->name_en ?? $this->paymentMethod->name,
+                'name_ar' => $this->paymentMethod->name_ar,
+                'instructions' => LocalizedFields::value($this->paymentMethod, 'instructions', $locale),
+                'instructions_en' => $this->paymentMethod->instructions_en ?? $this->paymentMethod->instructions,
+                'instructions_ar' => $this->paymentMethod->instructions_ar,
                 'account_details' => $this->paymentMethod->account_details,
                 'requires_proof' => $this->paymentMethod->requires_proof,
             ] : null),

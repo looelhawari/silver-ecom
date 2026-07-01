@@ -72,7 +72,7 @@ the operational overhead of true microservices.
 - **State:** TanStack Query for server state; Zustand for cart/auth/UI.
 - **Config-driven branding:** `src/config/*` mirrors the backend's
   `config/white_label.php`, so the storefront is white-label without code changes.
-- **i18n / RTL:** next-intl with `en` (LTR) and `ar` (RTL); `dir` from the active locale.
+- **i18n / RTL:** next-intl with `en` (LTR) and `ar-EG` (RTL); `dir` from the active locale.
 - **Theme + motion:** CSS variables in `globals.css` (active preset `silver-luxury`:
   pearl / charcoal / champagne) plus GPU-only motion keyframes. Homepage animations
   (typing, count-up, tilt, marquee, spotlight, scroll-progress) are lightweight and

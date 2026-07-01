@@ -3,29 +3,13 @@
 import { ArrowRight, BadgeCheck, PencilRuler } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 import { CountUp } from "@/components/home/count-up";
 import { Tilt } from "@/components/home/tilt";
 import { TypingText } from "@/components/home/typing-text";
 import { hero } from "@/config/homepageData";
-
-const miniBadges = ["Quality silver", "Custom designs", "Delivery across Egypt", "Secure tracking"];
-
-const typedPhrases = [
-  "Egyptian silver.",
-  "Italian silver.",
-  "Turkish silver.",
-  "Local silver.",
-  "custom designs.",
-];
-
-const stats: { to: number; label: string; decimals?: number }[] = [
-  { to: 5, label: "Silver types" },
-  { to: 9, label: "Categories" },
-  { to: 4, label: "Payment options" },
-  { to: 4.9, decimals: 1, label: "Avg rating" },
-];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -37,6 +21,20 @@ const fadeUp = {
 };
 
 export function HeroSection() {
+  const t = useTranslations("homepage.hero");
+  const miniBadges = t.raw("badges") as string[];
+  const typedPhrases = t.raw("typedPhrases") as string[];
+  const floatingCards = hero.floatingCards.map((card, i) => ({
+    ...card,
+    ...((t.raw("floatingCards") as { title: string; caption: string }[])[i] ?? {}),
+  }));
+  const stats: { to: number; label: string; decimals?: number }[] = [
+    { to: 5, label: t("stats.silverTypes") },
+    { to: 9, label: t("stats.categories") },
+    { to: 4, label: t("stats.paymentOptions") },
+    { to: 4.9, decimals: 1, label: t("stats.avgRating") },
+  ];
+
   return (
     <section className="relative overflow-hidden bg-[#15171b] text-white">
       {/* Animated ambient glows */}
@@ -51,9 +49,9 @@ export function HeroSection() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-white/80"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium uppercase tracking-normal text-white/80"
           >
-            {hero.eyebrow}
+            {t("eyebrow")}
           </motion.span>
 
           <motion.h1
@@ -63,7 +61,7 @@ export function HeroSection() {
             animate="show"
             className="mt-6 max-w-xl font-serif text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl"
           >
-            {hero.headline}
+            {t("headline")}
           </motion.h1>
 
           <motion.p
@@ -73,7 +71,7 @@ export function HeroSection() {
             animate="show"
             className="mt-5 text-lg font-medium text-white/90"
           >
-            Now crafting{" "}
+            {t("nowCrafting")}{" "}
             <TypingText phrases={typedPhrases} className="font-serif text-[var(--accent)]" />
           </motion.p>
 
@@ -84,7 +82,7 @@ export function HeroSection() {
             animate="show"
             className="mt-3 max-w-xl text-base leading-7 text-white/70"
           >
-            {hero.subheadline}
+            {t("subheadline")}
           </motion.p>
 
           <motion.div
@@ -98,14 +96,14 @@ export function HeroSection() {
               href="/shop"
               className="group inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-[var(--foreground)] transition-transform hover:-translate-y-0.5"
             >
-              Shop collection
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              {t("shopNow")}
+              <ArrowRight className="rtl-flip h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/custom-order"
               className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/25 px-6 text-sm font-semibold text-white transition-colors hover:bg-white/10"
             >
-              <PencilRuler className="h-4 w-4" /> Create custom piece
+              <PencilRuler className="h-4 w-4" /> {t("startCustom")}
             </Link>
           </motion.div>
 
@@ -154,7 +152,7 @@ export function HeroSection() {
             <div className="shine relative h-full w-full overflow-hidden rounded-3xl border border-white/10">
               <Image
                 src={hero.image}
-                alt="Handcrafted silver jewelry"
+                alt={t("imageAlt")}
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 40vw"
@@ -164,7 +162,7 @@ export function HeroSection() {
             </div>
 
             {/* Floating detail cards */}
-            {hero.floatingCards.map((card, i) => (
+            {floatingCards.map((card, i) => (
               <motion.div
                 key={card.title}
                 initial={{ opacity: 0, y: 20 }}

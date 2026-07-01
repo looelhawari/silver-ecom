@@ -2,13 +2,14 @@
 
 namespace App\Modules\Catalog\Models;
 
+use App\Modules\AuditLogs\Services\AuditLogger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SilverType extends Model
 {
     protected $fillable = [
-        'name', 'name_ar', 'slug', 'purity', 'gram_price',
+        'name', 'name_en', 'name_ar', 'slug', 'purity', 'gram_price',
         'gram_price_updated_at', 'is_active', 'sort_order',
     ];
 
@@ -33,7 +34,7 @@ class SilverType extends Model
         // Audit gram-price changes (a sensitive pricing input).
         static::updated(function (SilverType $type): void {
             if ($type->wasChanged('gram_price')) {
-                app(\App\Modules\AuditLogs\Services\AuditLogger::class)->log(
+                app(AuditLogger::class)->log(
                     'silver-type.gram_price_changed',
                     $type,
                     ['from' => $type->getOriginal('gram_price'), 'to' => $type->gram_price],

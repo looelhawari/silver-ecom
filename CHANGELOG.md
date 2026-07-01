@@ -2,6 +2,21 @@
 
 All notable changes per phase.
 
+## [Localization Phase] — 2026-07-01 — Public website EN / Egyptian Arabic
+
+Implemented public storefront localization while deferring admin-dashboard UI work:
+- Added next-intl locale routing for `/en` and `/ar-EG`, request config, locale
+  middleware, language switcher, document `lang`/`dir`, localized metadata.
+- Replaced customer-facing hardcoded storefront strings with `en` and `ar-EG`
+  message catalogs across home, shop, product, cart, checkout, auth/account,
+  tracking, custom orders, contact/FAQ/CMS, invoice and payment-proof flows.
+- Added API locale resolution via `?locale` / `Accept-Language`, English fallback,
+  localized resources, localized status labels, and backend support helpers.
+- Added a guarded migration for explicit `*_en` / `*_ar` content columns and
+  English backfill from legacy columns.
+- Verified: `php artisan test` (21 passed / 101 assertions), scoped Pint, frontend
+  `npm run lint`, frontend `npm run build`.
+
 ## [Docs] — 2026-07-01 — Documentation brought current
 
 Refreshed all Markdown docs so a new developer has an accurate, complete picture:

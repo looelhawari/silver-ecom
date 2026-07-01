@@ -21,9 +21,9 @@ Money is never trusted from the client — see `Catalog\Services\PricingService`
 ## Catalog — `app/Modules/Catalog/Models`
 | Model | Key fields | Relationships |
 |-------|-----------|---------------|
-| `SilverType` | name/name_ar, slug, purity, `gram_price`, `gram_price_updated_at`, is_active | hasMany Product |
-| `Category` | name/name_ar, slug, description, image_path, seo_*, is_active, sort_order | hasMany Product |
-| `Product` | name/name_ar, slug, sku, weight_in_grams, stock_quantity, **pricing fields**, is_active/featured/best_seller, tags, main_image_path, seo_* | belongsTo Category & SilverType; hasMany images, variants; hasOne mainImage |
+| `SilverType` | name/name_en/name_ar, slug, purity, `gram_price`, `gram_price_updated_at`, is_active | hasMany Product |
+| `Category` | name/name_en/name_ar, slug, description_en/description_ar, image_path, localized seo_*, is_active, sort_order | hasMany Product |
+| `Product` | name/name_en/name_ar, slug, sku, description_en/description_ar, care_instructions_en/care_instructions_ar, weight_in_grams, stock_quantity, **pricing fields**, is_active/featured/best_seller, tags, main_image_path, localized seo_* | belongsTo Category & SilverType; hasMany images, variants; hasOne mainImage |
 | `ProductImage` | path, alt, is_main, sort_order | belongsTo Product |
 | `ProductVariant` | type (ring_size/chain_length/…), label, value, price_adjustment, stock_quantity | belongsTo Product |
 
@@ -42,7 +42,7 @@ Money is never trusted from the client — see `Catalog\Services\PricingService`
 | `OrderItem` | Orders | snapshots product_name/sku/silver_type/weight/unit_price/line_total |
 | `OrderStatusHistory` | Orders | type (order/payment/shipping), status, note, changed_by, visible_to_customer |
 | `ShippingAddress` | Shipping | belongsTo Order; full address + tracking is on the order |
-| `PaymentMethod` | Payments | code, name/name_ar, instructions, account_details, requires_proof, is_active |
+| `PaymentMethod` | Payments | code, name/name_en/name_ar, instructions_en/instructions_ar, account_details, requires_proof, is_active |
 | `PaymentProof` | Payments | belongsTo Order & PaymentMethod; file_path, status (pending/approved/rejected), reviewed_by |
 
 ## Custom orders — `app/Modules/CustomOrders/Models`
@@ -58,15 +58,22 @@ Money is never trusted from the client — see `Catalog\Services\PricingService`
 |-------|--------|-------|
 | `UserAddress` | Users | belongsTo User; label, full contact + address, is_default |
 | `UserAdminNote` | Users | belongsTo User & author (admin) |
-| `Page` | Content | slug, title/title_ar, body/body_ar, seo_*, is_published |
-| `Faq` | Content | question/answer (+_ar), group, sort_order, is_active |
-| `Banner` | Content | title/subtitle (+_ar), image_path, link_url, placement, active window |
+| `Page` | Content | slug, title/title_en/title_ar, body/body_en/body_ar, content_en/content_ar, localized seo_*, is_published |
+| `Faq` | Content | question/question_en/question_ar, answer/answer_en/answer_ar, group, sort_order, is_active |
+| `Banner` | Content | title/title_en/title_ar, subtitle/subtitle_en/subtitle_ar, button_text_en/button_text_ar, image_path, link_url, placement, active window |
 | `SupportMessage` | Support | name/email/phone/subject/message, status (new/read/archived), admin_note |
 | `WishlistItem` | Wishlist | belongsTo User & Product (unique pair) |
 | `AuditLog` | AuditLogs | actor (user_id), action, auditable morph, properties (json), ip_address |
 
 Settings use the key-value `Setting` model (`app/Modules/Settings/Models`) read via
 `Settings\Services\StoreSettings` (cached).
+
+## Localization model behavior
+`App\Support\Localization\LocalizedFields` resolves display fields from the request
+locale (`en` or `ar-EG`) and falls back to English when Arabic content is empty.
+`LocalizedStatusLabels` returns localized status objects with `label`, `label_en`
+and `label_ar`. The public API uses these helpers; the admin dashboard translation
+editing UI is deferred to the next part.
 
 ## Status enums (implemented, `HasLabel`)
 - **OrderStatus:** Pending, AwaitingConfirmation, Confirmed, Preparing, ReadyToShip,

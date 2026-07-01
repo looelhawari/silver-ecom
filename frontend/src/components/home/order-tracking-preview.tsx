@@ -2,22 +2,25 @@
 
 import { Check } from "lucide-react";
 import { motion } from "motion/react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 import { SectionHeader } from "@/components/home/section-header";
-import { trackingSteps } from "@/config/homepageData";
 
 // Mock progress: everything up to "Shipped" is done.
 const CURRENT = 4;
 
 export function OrderTrackingPreview() {
+  const t = useTranslations("homepage.tracking");
+  const trackingSteps = t.raw("steps") as string[];
+
   return (
     <section className="bg-[var(--background)]">
       <div className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Order tracking"
-          title="Always know where your order is"
-          description="Every order gets a code you can track any time — from confirmation to your doorstep."
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          description={t("description")}
         />
 
         <motion.div
@@ -29,9 +32,9 @@ export function OrderTrackingPreview() {
         >
           <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
             <span className="text-sm text-[var(--muted-foreground)]">
-              Order <span className="font-semibold text-[var(--foreground)]">FS-260701-AB12C</span>
+              {t("order")} <span className="font-semibold text-[var(--foreground)]">FS-260701-AB12C</span>
             </span>
-            <span className="rounded-full bg-[var(--surface)] px-3 py-1 text-xs font-medium">In transit</span>
+            <span className="rounded-full bg-[var(--surface)] px-3 py-1 text-xs font-medium">{t("inTransit")}</span>
           </div>
 
           {/* Timeline: vertical on mobile, horizontal on desktop */}
@@ -74,7 +77,7 @@ export function OrderTrackingPreview() {
               href="/track-order"
               className="inline-flex h-11 items-center rounded-lg bg-[var(--foreground)] px-6 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
             >
-              Track your order
+              {t("track")}
             </Link>
           </div>
         </motion.div>

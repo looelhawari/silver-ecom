@@ -12,7 +12,7 @@ export function Marquee({ items }: { items: string[] }) {
       <div className="marquee-mask overflow-hidden">
         <div className="marquee-track">
           {doubled.map((item, i) => (
-            <span key={i} className="flex items-center whitespace-nowrap text-sm font-medium tracking-wide">
+            <span key={i} className="flex items-center whitespace-nowrap text-sm font-medium tracking-normal">
               <span className="px-6">{item}</span>
               <Gem className="h-3.5 w-3.5 text-[var(--accent)]" />
             </span>
