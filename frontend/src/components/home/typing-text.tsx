@@ -1,19 +1,17 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
 /**
  * Typewriter that cycles through phrases. Renders the first phrase on the server
- * (no layout shift / hydration mismatch) and animates after mount. Static when
- * the user prefers reduced motion.
+ * (no layout shift / hydration mismatch) and animates after mount.
  */
 export function TypingText({
   phrases,
   className,
-  typingSpeed = 65,
-  deletingSpeed = 35,
-  pause = 1500,
+  typingSpeed = 60,
+  deletingSpeed = 30,
+  pause = 1400,
 }: {
   phrases: string[];
   className?: string;
@@ -21,13 +19,12 @@ export function TypingText({
   deletingSpeed?: number;
   pause?: number;
 }) {
-  const reduced = useReducedMotion();
   const [text, setText] = useState(phrases[0] ?? "");
   const [index, setIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (reduced || phrases.length === 0) return;
+    if (phrases.length === 0) return;
 
     const current = phrases[index % phrases.length];
     let timeout: ReturnType<typeof setTimeout>;
@@ -45,7 +42,7 @@ export function TypingText({
     }
 
     return () => clearTimeout(timeout);
-  }, [text, deleting, index, phrases, reduced, typingSpeed, deletingSpeed, pause]);
+  }, [text, deleting, index, phrases, typingSpeed, deletingSpeed, pause]);
 
   return (
     <span className={className} aria-live="polite">

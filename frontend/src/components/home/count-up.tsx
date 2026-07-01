@@ -1,11 +1,10 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 /**
  * Counts from 0 → `to` once it scrolls into view (rAF, single run). SSR renders
- * the start value so there's no hydration mismatch. Jumps to `to` for reduced motion.
+ * the start value so there's no hydration mismatch.
  */
 export function CountUp({
   to,
@@ -20,7 +19,6 @@ export function CountUp({
   suffix?: string;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
   const [value, setValue] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
@@ -28,11 +26,6 @@ export function CountUp({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    if (reduced) {
-      setValue(to);
-      return;
-    }
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -54,7 +47,7 @@ export function CountUp({
 
     io.observe(el);
     return () => io.disconnect();
-  }, [to, duration, reduced]);
+  }, [to, duration]);
 
   const display =
     decimals > 0 ? value.toFixed(decimals) : Math.round(value).toLocaleString("en-US");

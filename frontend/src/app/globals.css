@@ -74,18 +74,26 @@ select {
 }
 @keyframes fidda-aurora {
   0% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(6%, 4%, 0) scale(1.15); }
+  50% { transform: translate3d(12%, 8%, 0) scale(1.3); }
   100% { transform: translate3d(0, 0, 0) scale(1); }
 }
 @keyframes fidda-shine {
   0% { transform: translateX(-160%) skewX(-20deg); }
   100% { transform: translateX(260%) skewX(-20deg); }
 }
+@keyframes fidda-kenburns {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.12); }
+}
 
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: fidda-marquee 34s linear infinite;
+  animation: fidda-marquee 22s linear infinite;
+}
+.ken-burns {
+  animation: fidda-kenburns 18s ease-in-out infinite alternate;
+  will-change: transform;
 }
 .marquee-mask {
   -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
@@ -96,7 +104,7 @@ select {
   animation: fidda-caret 1s steps(1) infinite;
 }
 .aurora {
-  animation: fidda-aurora 16s ease-in-out infinite;
+  animation: fidda-aurora 12s ease-in-out infinite;
   will-change: transform;
 }
 .shine::after {
@@ -124,11 +132,12 @@ select {
   opacity: 1;
 }
 
+/* Reduced-motion: calm only the large ambient effects; keep the subtle brand
+ * motion (marquee, caret) so the page still feels alive. */
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track,
   .aurora,
-  .caret,
-  .shine::after {
+  .shine::after,
+  .ken-burns {
     animation: none !important;
   }
 }

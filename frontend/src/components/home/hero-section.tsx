@@ -158,7 +158,7 @@ export function HeroSection() {
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 40vw"
-                className="object-cover"
+                className="ken-burns object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
             </div>

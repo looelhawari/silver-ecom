@@ -1,27 +1,25 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
 import type { PointerEvent, ReactNode } from "react";
 import { useRef } from "react";
 
 /**
  * Subtle 3D cursor tilt. Updates transform directly on the DOM node (no React
- * re-render per move). No-op for touch/reduced-motion.
+ * re-render per move). No-op for touch input.
  */
 export function Tilt({
   children,
   className,
-  max = 7,
+  max = 8,
 }: {
   children: ReactNode;
   className?: string;
   max?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
 
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (reduced || e.pointerType !== "mouse") return;
+    if (e.pointerType !== "mouse") return;
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
