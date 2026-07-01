@@ -2,6 +2,38 @@
 
 All notable changes per phase.
 
+## [Homepage redesign] — 2026-07-01 — Luxury homepage
+
+Rebuilt the homepage as a cinematic, luxury silver-jewelry experience (17 sections,
+reusable components, backend-ready data layer).
+
+### Sections
+Cinematic hero (floating detail cards) → trust strip → category showcase → signature
+collections (editorial bento) → featured products (best-sellers/new/featured tabs) →
+custom-order story (upload→quote mockup) → pricing transparency (live estimate
+calculator) → why buy → order-tracking timeline → manual-payment trust → reviews →
+social showcase → FAQ preview → final CTA.
+
+### Components & data
+- `src/config/homepageData.ts` — API-ready content service (announcements, hero,
+  collections, steps, reviews, FAQ, calculator config, social).
+- `src/components/home/*` — Reveal, SectionHeader, TrustBadge, CategoryCard,
+  CollectionTile, icons + all section components.
+- Upgraded **LuxuryNavbar** (glass sticky, scroll-aware, WhatsApp CTA, mobile
+  slide-over), rotating **AnnouncementBar**, and **PremiumFooter** (newsletter →
+  contact endpoint, payment/social/policy links).
+- Premium web fonts already active (Cormorant Garamond + Inter).
+
+### Animations / responsive / SEO / a11y
+- Motion: hero entrance + floating cards, scroll-reveal wrapper, timeline stagger,
+  card hover zoom — kept subtle and lightweight.
+- Mobile-first: horizontal-scroll categories, responsive bento, stacked hero.
+- Homepage metadata (absolute title + description + OG); single H1; semantic sections;
+  lazy-loaded below-the-fold imagery; alt text; keyboard-accessible nav.
+
+### Verified
+- `npm run build` clean (29 routes); homepage SSRs all sections + live featured products.
+
 ## [Completeness pass] — 2026-07-01 — Master-prompt gap closure
 
 Audited the build against the master prompt and closed the remaining gaps:
