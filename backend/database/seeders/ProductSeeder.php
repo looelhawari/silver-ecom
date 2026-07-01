@@ -15,6 +15,17 @@ class ProductSeeder extends Seeder
         $cat = Category::pluck('id', 'slug');
         $silver = SilverType::pluck('id', 'slug');
 
+        // Placeholder photos from LoremFlickr (real, keyword-relevant, free to hotlink).
+        // `lock` keeps each image stable across runs. Replace with real uploads via admin.
+        $keyword = [
+            'rings' => 'silver,ring', 'bracelets' => 'silver,bracelet',
+            'necklaces' => 'silver,necklace', 'chains' => 'silver,chain',
+            'anklets' => 'silver,anklet', 'earrings' => 'silver,earrings',
+            'pendants' => 'silver,pendant', 'sets' => 'silver,jewelry',
+            'gifts' => 'silver,gift',
+        ];
+        $photo = fn (string $kw, int $lock): string => "https://loremflickr.com/800/800/{$kw}?lock={$lock}";
+
         // [name, category, silver, weight(g), workmanship, pricing_type, fixed_price,
         //  stock, featured, best_seller, ar_name]
         $products = [
@@ -37,6 +48,9 @@ class ProductSeeder extends Seeder
         foreach ($products as $i => $p) {
             [$name, $category, $silverSlug, $weight, $workmanship, $pricingType, $fixed, $stock, $featured, $best, $nameAr] = $p;
 
+            $kw = $keyword[$category] ?? 'silver,jewelry';
+            $baseLock = ($i + 1) * 10;
+
             $product = Product::updateOrCreate(
                 ['slug' => str($name)->slug()->value()],
                 [
@@ -58,9 +72,21 @@ class ProductSeeder extends Seeder
                     'is_active' => true,
                     'is_featured' => $featured,
                     'is_best_seller' => $best,
+                    'main_image_path' => $photo($kw, $baseLock),
                     'tags' => [$category, '925'],
                 ],
             );
+
+            // Gallery images (idempotent).
+            $product->images()->delete();
+            foreach ([0, 1, 2] as $n) {
+                $product->images()->create([
+                    'path' => $photo($kw, $baseLock + $n),
+                    'alt' => $name,
+                    'is_main' => $n === 0,
+                    'sort_order' => $n,
+                ]);
+            }
 
             // Add ring-size variants for rings.
             if ($category === 'rings') {

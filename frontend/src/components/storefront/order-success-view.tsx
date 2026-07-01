@@ -5,6 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+import { PaymentProofUpload } from "@/components/storefront/payment-proof-upload";
 import { Button } from "@/components/ui/button";
 import { storeConfig } from "@/config";
 import { apiFetch } from "@/lib/api";
@@ -15,7 +16,13 @@ type Order = {
   total: number;
   currency: string;
   payment_status: { label: string };
-  payment_method?: { name: string; instructions?: string | null; account_details?: string | null } | null;
+  payment_method?: {
+    name: string;
+    instructions?: string | null;
+    account_details?: string | null;
+    requires_proof?: boolean;
+  } | null;
+  has_payment_proof?: boolean;
   items: { product_name: string; quantity: number; line_total: number }[];
 };
 
@@ -67,6 +74,10 @@ export function OrderSuccessView() {
                 <p className="mt-2 text-sm font-medium">{data.payment_method.account_details}</p>
               )}
             </div>
+          )}
+
+          {data.payment_method?.requires_proof && !data.has_payment_proof && (
+            <PaymentProofUpload code={code} phone={phone} />
           )}
         </div>
       )}

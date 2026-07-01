@@ -43,37 +43,42 @@ curl -X POST http://localhost:8000/api/v1/checkout/validate \
 Guest tracking always requires **code + phone** — an order/request code alone cannot
 reveal a record (verified by tests). List endpoints return `{ data, meta }`.
 
-## Planned endpoints (later phases)
+## Authenticated & workflow endpoints (Phases 5–7)
 
-**Auth (Phase 7)** — `POST /auth/register|login|logout`, `GET /auth/me`,
-`POST /auth/forgot-password|reset-password`.
+**Auth** (bearer token via Sanctum):
+| Method | Path | Auth |
+|--------|------|------|
+| POST | `/api/v1/auth/register` | none · throttled |
+| POST | `/api/v1/auth/login` | none · throttled |
+| POST | `/api/v1/auth/logout` | token |
+| GET | `/api/v1/auth/me` | token |
 
-**Profile (Phase 7)** — `GET/PATCH /profile`, `GET /profile/orders`,
-`GET /profile/custom-requests`, `PATCH /profile/password`.
+Include `Authorization: Bearer <token>` on protected calls.
 
-**Payments (Phase 5)** — `POST /orders/{code}/payment-proof` (upload proof).
+**Account** (token):
+| Method | Path | Description |
+|--------|------|-------------|
+| GET / PATCH | `/api/v1/profile` | View / update profile |
+| PATCH | `/api/v1/profile/password` | Change password |
+| GET | `/api/v1/profile/orders` | Order history |
+| GET | `/api/v1/profile/custom-requests` | Custom request history |
+| GET / POST | `/api/v1/addresses` · `/api/v1/addresses/{id}` (PATCH/DELETE) | Address CRUD (owner-only) |
+| GET | `/api/v1/wishlist` · POST/DELETE `/api/v1/wishlist/{product}` | Wishlist |
 
-**Custom quote actions (Phase 6)** — `POST /custom-requests/{code}/accept-quote|reject-quote`.
+**Order & custom workflow** (guest, code + phone):
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/v1/orders/{code}/payment-proof` | Upload payment proof (multipart) |
+| POST | `/api/v1/custom-requests/{code}/accept-quote` | Accept a sent quote |
+| POST | `/api/v1/custom-requests/{code}/reject-quote` | Decline a sent quote |
 
-**Wishlist (optional)** — `GET /wishlist`, `POST/DELETE /wishlist/{product}`.
+## Still planned (later phases)
 
-**Orders (Phase 6/7)** — `GET /orders`, `GET /orders/{id}`,
-`POST /orders/track` (order code + phone), `GET /orders/{id}/invoice`.
+- Forgot/reset password email flow (needs a mail service).
+- `GET /orders/{id}/invoice` (printable/PDF invoice).
+- Coupons.
 
-**Custom orders (Phase 6)** — `POST /custom-requests`,
-`POST /custom-requests/track` (code + phone),
-`POST /custom-requests/{id}/accept-quote`, `.../reject-quote`.
-
-**Profile (Phase 7)** — `GET /profile`, `PATCH /profile`,
-`GET /profile/orders`, `GET /profile/custom-requests`, `PATCH /profile/password`.
-
-**Content/Support (Phase 4/8)** — `GET /faqs`, `GET /pages/{slug}`,
-`POST /contact`.
-
-**Wishlist (optional)** — `GET /wishlist`, `POST /wishlist/{product}`,
-`DELETE /wishlist/{product}`.
-
-## Conventions (planned)
+## Conventions
 
 - List endpoints are paginated; responses use `{ data, meta }` (API Resources).
 - Rate-limited endpoints: login, register, contact, custom-request,

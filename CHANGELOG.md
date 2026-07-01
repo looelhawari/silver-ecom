@@ -2,6 +2,38 @@
 
 All notable changes per phase.
 
+## [Phases 5–7] — 2026-07-01 — Orders, Custom Workflow & Accounts
+
+### Order workflow (Phase 5)
+- Payment-proof upload API (`POST /orders/{code}/payment-proof`, code + phone verified,
+  image/PDF validated) → sets payment status to *Proof Uploaded*.
+- Filament Order form now shows the uploaded proof with an approve/reject control.
+- `OrderObserver` auto-records every order/payment/shipping status change to the
+  status history **and** the audit log.
+
+### Custom workflow (Phase 6)
+- Customer accept/reject quote (`POST /custom-requests/{code}/accept-quote|reject-quote`).
+- Admin **Convert to order** action on the custom request page (`ConvertToOrder` action);
+  shared `OrderCode` helper (refactored out of `CheckoutService`).
+- Custom-tracking page shows Accept/Decline when a quote is sent.
+
+### Customer accounts (Phase 7)
+- Sanctum **token auth**: register/login/logout/me; `apiFetch` attaches the bearer
+  token; frontend `useAuthStore` + `loadMe()` on boot.
+- Profile view/update, change password; address CRUD (IDOR-guarded); order &
+  custom-request history; wishlist (API + page + product-detail + header).
+- Frontend: `/login`, `/register`, `/account` (profile + password + addresses),
+  `/account/orders`, `/account/requests`, `/wishlist`; header shows account/wishlist.
+
+### Images (interim)
+- Seeded real jewelry photos via LoremFlickr (keyword + stable `lock`) for product
+  main images, product galleries, and categories; allowed image hosts in `next.config`.
+
+### Verified
+- Backend `php artisan test` → **19 passed / 92 assertions** (added auth, profile,
+  address IDOR, wishlist, payment-proof, quote-accept, convert-to-order).
+- Frontend `npm run build` clean (24 routes); new pages return 200 end-to-end.
+
 ## [Phases 2–4] — 2026-07-01 — Data, Admin & Storefront
 
 ### Database & backend (Phase 2)

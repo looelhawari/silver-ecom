@@ -22,8 +22,8 @@ final class ModuleRegistry
             // Foundation
             new ModuleDefinition('Core', 'core', $basePath.'/Core', ''),
             new ModuleDefinition('Access Control', 'access-control', $basePath.'/AccessControl', null),
-            new ModuleDefinition('Auth', 'auth', $basePath.'/Auth', null),
-            new ModuleDefinition('Users', 'users', $basePath.'/Users', null),
+            new ModuleDefinition('Auth', 'auth', $basePath.'/Auth', 'auth'),
+            new ModuleDefinition('Users', 'users', $basePath.'/Users', ''),
 
             // Catalog & merchandising (public storefront routes at /api/v1/*)
             new ModuleDefinition('Catalog', 'catalog', $basePath.'/Catalog', ''),
@@ -39,7 +39,7 @@ final class ModuleRegistry
             new ModuleDefinition('Custom Orders', 'custom-orders', $basePath.'/CustomOrders', ''),
 
             // Customer extras (optional)
-            new ModuleDefinition('Wishlist', 'wishlist', $basePath.'/Wishlist', null),
+            new ModuleDefinition('Wishlist', 'wishlist', $basePath.'/Wishlist', ''),
 
             // Content, support & ops
             new ModuleDefinition('Content', 'content', $basePath.'/Content', ''),

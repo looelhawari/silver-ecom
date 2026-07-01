@@ -22,11 +22,13 @@ class CategorySeeder extends Seeder
         ];
 
         foreach ($categories as $i => $category) {
+            $slug = str($category['name'])->slug()->value();
             Category::updateOrCreate(
-                ['slug' => str($category['name'])->slug()->value()],
+                ['slug' => $slug],
                 [
                     ...$category,
                     'description' => "Handcrafted silver {$category['name']}.",
+                    'image_path' => "https://loremflickr.com/800/600/silver,{$slug}?lock=".($i + 1),
                     'is_active' => true,
                     'sort_order' => $i,
                 ],

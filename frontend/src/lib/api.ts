@@ -1,3 +1,4 @@
+import { getToken } from "@/lib/auth-token";
 import type { ApiResponse } from "@/types/commerce";
 
 /**
@@ -33,12 +34,15 @@ export async function apiFetch<T>(
     ? path
     : `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 
+  const token = getToken();
+
   const response = await fetch(url, {
     ...init,
     credentials: "include",
     headers: {
       Accept: "application/json",
       ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     body: body !== undefined ? JSON.stringify(body) : undefined,

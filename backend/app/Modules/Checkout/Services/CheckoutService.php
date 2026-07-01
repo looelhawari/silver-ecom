@@ -8,10 +8,10 @@ use App\Modules\Orders\Enums\OrderStatus;
 use App\Modules\Orders\Enums\PaymentStatus;
 use App\Modules\Orders\Enums\ShippingStatus;
 use App\Modules\Orders\Models\Order;
+use App\Modules\Orders\Support\OrderCode;
 use App\Modules\Payments\Models\PaymentMethod;
 use App\Modules\Settings\Services\StoreSettings;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -94,7 +94,7 @@ class CheckoutService
 
         return DB::transaction(function () use ($data, $quote, $method): Order {
             $order = Order::create([
-                'order_code' => $this->generateOrderCode(),
+                'order_code' => OrderCode::generate(),
                 'user_id' => $data['user_id'] ?? null,
                 'customer_name' => $data['customer_name'],
                 'customer_phone' => $data['customer_phone'],
@@ -169,16 +169,5 @@ class CheckoutService
         }
 
         return $base;
-    }
-
-    private function generateOrderCode(): string
-    {
-        $prefix = (string) StoreSettings::get('orders.order_prefix', 'FS');
-
-        do {
-            $code = sprintf('%s-%s-%s', $prefix, now()->format('ymd'), strtoupper(Str::random(5)));
-        } while (Order::where('order_code', $code)->exists());
-
-        return $code;
     }
 }

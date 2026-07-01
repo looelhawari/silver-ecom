@@ -1,20 +1,36 @@
 "use client";
 
-import { Minus, Plus, ShoppingBag } from "lucide-react";
+import { Heart, Minus, Plus, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { apiFetch } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useCartStore } from "@/stores/useCartStore";
 import type { ProductDetail } from "@/types/catalog";
 
 export function ProductPurchase({ product }: { product: ProductDetail }) {
   const router = useRouter();
   const add = useCartStore((s) => s.add);
+  const user = useAuthStore((s) => s.user);
   const [quantity, setQuantity] = useState(1);
   const [variantId, setVariantId] = useState<number | null>(product.variants[0]?.id ?? null);
+
+  const addToWishlist = async () => {
+    if (!user) {
+      toast.error("Sign in to save to your wishlist.");
+      return router.push("/login");
+    }
+    try {
+      await apiFetch(`/wishlist/${product.id}`, { method: "POST" });
+      toast.success("Saved to wishlist");
+    } catch {
+      toast.error("Could not update wishlist.");
+    }
+  };
 
   const variant = product.variants.find((v) => v.id === variantId);
   const unitPrice = product.price + (variant?.price_adjustment ?? 0);
@@ -91,6 +107,9 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
           }}
         >
           Buy now
+        </Button>
+        <Button size="lg" variant="outline" aria-label="Add to wishlist" onClick={addToWishlist}>
+          <Heart className="h-4 w-4" />
         </Button>
       </div>
     </div>

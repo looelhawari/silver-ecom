@@ -34,7 +34,9 @@ class OrderResource extends JsonResource
                 'name' => $this->paymentMethod->name,
                 'instructions' => $this->paymentMethod->instructions,
                 'account_details' => $this->paymentMethod->account_details,
+                'requires_proof' => $this->paymentMethod->requires_proof,
             ] : null),
+            'has_payment_proof' => $this->whenLoaded('paymentProof', fn () => $this->paymentProof !== null),
             'items' => $this->whenLoaded('items', fn () => $this->items->map(fn ($item) => [
                 'product_name' => $item->product_name,
                 'variant_label' => $item->variant_label,

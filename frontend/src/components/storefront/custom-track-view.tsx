@@ -48,6 +48,18 @@ export function CustomTrackView() {
     }
   };
 
+  const respondToQuote = async (decision: "accept" | "reject") => {
+    try {
+      const res = await apiFetch<{ data: CustomRequest }>(`/custom-requests/${code}/${decision}-quote`, {
+        method: "POST",
+        body: { phone },
+      });
+      setRequest(res.data);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Something went wrong.");
+    }
+  };
+
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6">
       <h1 className="font-serif text-3xl font-semibold">Track your custom request</h1>
@@ -88,9 +100,16 @@ export function CustomTrackView() {
               <h3 className="font-semibold">Your quote</h3>
               <p className="mt-2 font-serif text-2xl font-semibold">{formatPrice(request.quote.final_quote)}</p>
               {request.quote.message && <p className="mt-2 text-sm text-[var(--muted-foreground)]">{request.quote.message}</p>}
-              <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-                To accept or discuss this quote, contact us on WhatsApp with your request code.
-              </p>
+              {request.quote.status === "sent" ? (
+                <div className="mt-4 flex gap-3">
+                  <Button onClick={() => respondToQuote("accept")}>Accept quote</Button>
+                  <Button variant="outline" onClick={() => respondToQuote("reject")}>Decline</Button>
+                </div>
+              ) : (
+                <p className="mt-2 text-xs font-medium capitalize text-[var(--muted-foreground)]">
+                  You {request.quote.status} this quote.
+                </p>
+              )}
             </div>
           )}
         </div>

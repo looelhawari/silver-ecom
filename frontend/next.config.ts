@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
-// Allow product/category/banner images served from the Laravel API (public disk).
+// Allow product/category/banner images served from the Laravel API (public disk)
+// plus web placeholder-image hosts used during development.
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
 let apiHost: URL | null = null;
 try {
@@ -22,6 +23,9 @@ const nextConfig: NextConfig = {
             },
           ]
         : []),
+      { protocol: "https", hostname: "loremflickr.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "picsum.photos" },
     ],
   },
 };

@@ -8,12 +8,15 @@ use App\Modules\Orders\Enums\PaymentStatus;
 use App\Modules\Orders\Enums\ShippingStatus;
 use App\Modules\Payments\Models\PaymentMethod;
 use App\Modules\Payments\Models\PaymentProof;
+use App\Modules\Orders\Observers\OrderObserver;
 use App\Modules\Shipping\Models\ShippingAddress;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+#[ObservedBy(OrderObserver::class)]
 class Order extends Model
 {
     protected $fillable = [

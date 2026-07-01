@@ -1,6 +1,7 @@
-import { Search, UserRound } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 
+import { HeaderAccountButton } from "@/components/layout/header-account-button";
 import { HeaderCartButton } from "@/components/layout/header-cart-button";
 import { primaryNavigation, storeConfig } from "@/config";
 import { Button } from "@/components/ui/button";
@@ -39,17 +40,7 @@ export function SiteHeader() {
               <Search className="h-4 w-4" />
             </Link>
           </Button>
-          <Button
-            asChild
-            className="hidden sm:inline-flex"
-            variant="ghost"
-            size="icon"
-            aria-label="Account"
-          >
-            <Link href="/track-order">
-              <UserRound className="h-4 w-4" />
-            </Link>
-          </Button>
+          <HeaderAccountButton />
           <HeaderCartButton />
         </div>
       </div>

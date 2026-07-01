@@ -11,3 +11,9 @@ Route::post('/custom-requests', [CustomOrderController::class, 'store'])
 Route::post('/custom-requests/track', [CustomOrderController::class, 'track'])
     ->middleware('throttle:12,1')
     ->name('custom-requests.track');
+
+// Customer responds to a quote (code + phone verified).
+Route::post('/custom-requests/{code}/accept-quote', [CustomOrderController::class, 'acceptQuote'])
+    ->middleware('throttle:12,1')->name('custom-requests.accept-quote');
+Route::post('/custom-requests/{code}/reject-quote', [CustomOrderController::class, 'rejectQuote'])
+    ->middleware('throttle:12,1')->name('custom-requests.reject-quote');

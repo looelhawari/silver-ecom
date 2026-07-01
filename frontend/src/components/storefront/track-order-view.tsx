@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { PaymentProofUpload } from "@/components/storefront/payment-proof-upload";
 import { Button } from "@/components/ui/button";
 import { apiFetch, ApiError } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
@@ -17,6 +18,8 @@ type Order = {
   tracking_number?: string | null;
   courier_name?: string | null;
   shipping_note?: string | null;
+  payment_method?: { requires_proof?: boolean } | null;
+  has_payment_proof?: boolean;
   items: { product_name: string; quantity: number; line_total: number }[];
   timeline: { status: string; note?: string | null; at: string }[];
 };
@@ -76,6 +79,10 @@ export function TrackOrderView() {
               </div>
             ))}
           </div>
+
+          {order.payment_method?.requires_proof && !order.has_payment_proof && (
+            <PaymentProofUpload code={order.order_code} phone={phone} onUploaded={() => track(code, phone)} />
+          )}
 
           {(order.tracking_number || order.shipping_note) && (
             <div className="rounded-xl border border-[var(--border)] bg-white p-4 text-sm">

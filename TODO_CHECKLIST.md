@@ -48,19 +48,29 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
 - [x] About, contact, FAQ, privacy, terms, returns, silver-care
 - [x] Loading/empty/error states, toasts; responsive; SEO metadata per route
 
-## Phase 5 — Order Workflow  🔄 mostly done (pulled forward)
+## Phase 5 — Order Workflow  ✅ complete
 - [x] Cart (client) + checkout, **server-side** pricing & totals, order creation,
       order-code generation, status history, payment selection, admin editing, tracking
-- [ ] Payment-proof upload (customer) + admin proof review flow
-- [ ] Coupons (optional)
+- [x] Payment-proof upload (API + UI on success/track) + Filament admin proof review
+- [x] Order status auto-logged to history + audit log (OrderObserver)
+- [ ] Coupons (optional, deferred)
 
-## Phase 6 — Custom Silver Workflow  🔄 mostly done (pulled forward)
+## Phase 6 — Custom Silver Workflow  ✅ complete
 - [x] Submit request + secure image upload, tracking code, admin review/quote
-- [ ] Customer accept/reject quote in-app; convert-request-to-order action (admin)
+- [x] Customer accept/reject quote in-app (API + UI)
+- [x] Admin convert-request-to-order action (Filament)
 
-## Phase 7 — Profile & Customer Account
-- [ ] Register/login/logout (API + UI), profile, addresses, order & request history,
-      change password, wishlist
+## Phase 7 — Profile & Customer Account  ✅ complete
+- [x] Register/login/logout (Sanctum token API + UI)
+- [x] Profile view/update, change password
+- [x] Address CRUD (IDOR-guarded), order history, custom-request history
+- [x] Wishlist (API + page + product-detail + header)
+- [ ] Forgot/reset password email flow (deferred — needs mail service)
+
+## Images (interim)
+- [x] Real jewelry photos (LoremFlickr, keyword + stable lock) seeded for products
+      (main + gallery) and categories; `next.config` remote hosts allowed.
+      Replace with real uploads via the admin panel.
 
 ## Phase 8 — Security & Validation Pass
 - [ ] Forms, uploads, authorization, permissions, rate limiting, error handling,
