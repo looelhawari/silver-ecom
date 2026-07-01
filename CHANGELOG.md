@@ -2,6 +2,21 @@
 
 All notable changes per phase.
 
+## [Homepage interactivity pass] — 2026-07-01
+
+Elevated the homepage with tasteful, performance-safe interactivity:
+- **Typing effect** in the hero (rotates Egyptian/Italian/Turkish/Local/Custom).
+- **Count-up stats** (silver types, categories, payment options, rating) on view.
+- **Cursor-tilt** hero image + animated **aurora** glow + **shine** sweep.
+- **Spotlight** cursor-follow highlight on trust/why-buy cards.
+- **Silver marquee** ticker band + top **scroll-progress** bar.
+
+Performance & a11y: all animations are transform/opacity (GPU); tilt, spotlight and
+scroll bar write to the DOM directly (no per-frame React re-renders); count-up runs
+once via IntersectionObserver + rAF; typing is a single interval; everything honors
+`prefers-reduced-motion` (Motion's `useReducedMotion` + a global CSS guard). No new
+dependencies. Build clean; homepage SSRs the first typed phrase (no layout shift).
+
 ## [Homepage redesign] — 2026-07-01 — Luxury homepage
 
 Rebuilt the homepage as a cinematic, luxury silver-jewelry experience (17 sections,

@@ -1,13 +1,31 @@
 "use client";
 
-import { BadgeCheck, ArrowRight, PencilRuler } from "lucide-react";
+import { ArrowRight, BadgeCheck, PencilRuler } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { CountUp } from "@/components/home/count-up";
+import { Tilt } from "@/components/home/tilt";
+import { TypingText } from "@/components/home/typing-text";
 import { hero } from "@/config/homepageData";
 
 const miniBadges = ["Quality silver", "Custom designs", "Delivery across Egypt", "Secure tracking"];
+
+const typedPhrases = [
+  "Egyptian silver.",
+  "Italian silver.",
+  "Turkish silver.",
+  "Local silver.",
+  "custom designs.",
+];
+
+const stats: { to: number; label: string; decimals?: number }[] = [
+  { to: 5, label: "Silver types" },
+  { to: 9, label: "Categories" },
+  { to: 4, label: "Payment options" },
+  { to: 4.9, decimals: 1, label: "Avg rating" },
+];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -21,9 +39,9 @@ const fadeUp = {
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-[#15171b] text-white">
-      {/* Ambient glows */}
-      <div className="pointer-events-none absolute -left-24 top-0 h-96 w-96 rounded-full bg-[var(--accent)]/20 blur-[120px]" />
-      <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-white/10 blur-[120px]" />
+      {/* Animated ambient glows */}
+      <div className="aurora pointer-events-none absolute -left-24 top-0 h-96 w-96 rounded-full bg-[var(--accent)]/25 blur-[120px]" />
+      <div className="aurora pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-white/10 blur-[120px]" style={{ animationDelay: "-6s" }} />
 
       <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2 lg:px-8">
         {/* Copy */}
@@ -53,13 +71,24 @@ export function HeroSection() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-5 max-w-xl text-base leading-7 text-white/75 sm:text-lg"
+            className="mt-5 text-lg font-medium text-white/90"
+          >
+            Now crafting{" "}
+            <TypingText phrases={typedPhrases} className="font-serif text-[var(--accent)]" />
+          </motion.p>
+
+          <motion.p
+            custom={3}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            className="mt-3 max-w-xl text-base leading-7 text-white/70"
           >
             {hero.subheadline}
           </motion.p>
 
           <motion.div
-            custom={3}
+            custom={4}
             variants={fadeUp}
             initial="hidden"
             animate="show"
@@ -67,9 +96,10 @@ export function HeroSection() {
           >
             <Link
               href="/shop"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-[var(--foreground)] transition-transform hover:-translate-y-0.5"
+              className="group inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-white px-6 text-sm font-semibold text-[var(--foreground)] transition-transform hover:-translate-y-0.5"
             >
-              Shop collection <ArrowRight className="h-4 w-4" />
+              Shop collection
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/custom-order"
@@ -80,7 +110,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.ul
-            custom={4}
+            custom={5}
             variants={fadeUp}
             initial="hidden"
             animate="show"
@@ -92,6 +122,25 @@ export function HeroSection() {
               </li>
             ))}
           </motion.ul>
+
+          {/* Count-up stats */}
+          <motion.dl
+            custom={6}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            className="mt-10 grid max-w-md grid-cols-4 gap-4 border-t border-white/10 pt-6"
+          >
+            {stats.map((s) => (
+              <div key={s.label}>
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="font-serif text-2xl font-semibold sm:text-3xl">
+                  <CountUp to={s.to} decimals={s.decimals ?? 0} />
+                </dd>
+                <p className="mt-1 text-[11px] leading-tight text-white/55">{s.label}</p>
+              </div>
+            ))}
+          </motion.dl>
         </div>
 
         {/* Art direction */}
@@ -99,43 +148,45 @@ export function HeroSection() {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto aspect-[4/5] w-full max-w-md"
+          className="relative mx-auto w-full max-w-md"
         >
-          <div className="relative h-full w-full overflow-hidden rounded-3xl border border-white/10">
-            <Image
-              src={hero.image}
-              alt="Handcrafted silver jewelry"
-              fill
-              priority
-              sizes="(max-width: 1024px) 90vw, 40vw"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-          </div>
+          <Tilt className="relative aspect-[4/5] w-full">
+            <div className="shine relative h-full w-full overflow-hidden rounded-3xl border border-white/10">
+              <Image
+                src={hero.image}
+                alt="Handcrafted silver jewelry"
+                fill
+                priority
+                sizes="(max-width: 1024px) 90vw, 40vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+            </div>
 
-          {/* Floating detail cards */}
-          {hero.floatingCards.map((card, i) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: [0, -10, 0] }}
-              transition={{
-                opacity: { duration: 0.6, delay: 0.6 + i * 0.2 },
-                y: { duration: 4 + i, repeat: Infinity, ease: "easeInOut" },
-              }}
-              className={`absolute hidden items-center gap-3 rounded-2xl border border-white/15 bg-white/90 p-2.5 text-[var(--foreground)] shadow-xl backdrop-blur sm:flex ${
-                i === 0 ? "-left-6 top-10" : "-right-6 bottom-12"
-              }`}
-            >
-              <span className="relative h-12 w-12 overflow-hidden rounded-xl">
-                <Image src={card.image} alt={card.title} fill sizes="48px" className="object-cover" />
-              </span>
-              <span className="pr-2">
-                <span className="block text-sm font-semibold">{card.title}</span>
-                <span className="block text-xs text-[var(--muted-foreground)]">{card.caption}</span>
-              </span>
-            </motion.div>
-          ))}
+            {/* Floating detail cards */}
+            {hero.floatingCards.map((card, i) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: [0, -10, 0] }}
+                transition={{
+                  opacity: { duration: 0.6, delay: 0.6 + i * 0.2 },
+                  y: { duration: 4 + i, repeat: Infinity, ease: "easeInOut" },
+                }}
+                className={`absolute z-10 hidden items-center gap-3 rounded-2xl border border-white/15 bg-white/90 p-2.5 text-[var(--foreground)] shadow-xl backdrop-blur sm:flex ${
+                  i === 0 ? "-left-6 top-10" : "-right-6 bottom-12"
+                }`}
+              >
+                <span className="relative h-12 w-12 overflow-hidden rounded-xl">
+                  <Image src={card.image} alt={card.title} fill sizes="48px" className="object-cover" />
+                </span>
+                <span className="pr-2">
+                  <span className="block text-sm font-semibold">{card.title}</span>
+                  <span className="block text-xs text-[var(--muted-foreground)]">{card.caption}</span>
+                </span>
+              </motion.div>
+            ))}
+          </Tilt>
         </motion.div>
       </div>
     </section>

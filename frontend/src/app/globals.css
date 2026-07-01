@@ -60,3 +60,75 @@ textarea,
 select {
   font: inherit;
 }
+
+/* ---------------------------------------------------------------------------
+ * Motion utilities — all transform/opacity based (GPU), used by the homepage.
+ * ------------------------------------------------------------------------- */
+@keyframes fidda-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes fidda-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes fidda-aurora {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6%, 4%, 0) scale(1.15); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes fidda-shine {
+  0% { transform: translateX(-160%) skewX(-20deg); }
+  100% { transform: translateX(260%) skewX(-20deg); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: fidda-marquee 34s linear infinite;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+.caret {
+  display: inline-block;
+  animation: fidda-caret 1s steps(1) infinite;
+}
+.aurora {
+  animation: fidda-aurora 16s ease-in-out infinite;
+  will-change: transform;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.35) 50%, transparent 80%);
+  transform: translateX(-160%) skewX(-20deg);
+  animation: fidda-shine 6.5s ease-in-out 1.6s infinite;
+  pointer-events: none;
+}
+
+/* Cursor-follow highlight for cards (sets --mx/--my via JS, no re-render). */
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(185, 155, 98, 0.18), transparent 60%);
+  pointer-events: none;
+}
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .aurora,
+  .caret,
+  .shine::after {
+    animation: none !important;
+  }
+}

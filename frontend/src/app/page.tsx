@@ -7,10 +7,12 @@ import { FAQPreview } from "@/components/home/faq-preview";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { FinalCTA } from "@/components/home/final-cta";
 import { HeroSection } from "@/components/home/hero-section";
+import { Marquee } from "@/components/home/marquee";
 import { OrderTrackingPreview } from "@/components/home/order-tracking-preview";
 import { PaymentTrustSection } from "@/components/home/payment-trust";
 import { PricingTransparency } from "@/components/home/pricing-transparency";
 import { ReviewSection } from "@/components/home/review-section";
+import { ScrollProgress } from "@/components/home/scroll-progress";
 import { SignatureCollections } from "@/components/home/signature-collections";
 import { SocialShowcase } from "@/components/home/social-showcase";
 import { TrustStrip } from "@/components/home/trust-strip";
@@ -54,9 +56,16 @@ export default async function Home() {
     { key: "featured", label: "Featured", products: data.featured_products ?? [] },
   ];
 
+  const marqueeItems = [
+    "925 Sterling Silver", "Egyptian", "Italian", "Turkish", "Local",
+    "Custom-Made", "Hallmarked", "Delivery across Egypt", "Secure Tracking",
+  ];
+
   return (
     <StorefrontShell>
+      <ScrollProgress />
       <HeroSection />
+      <Marquee items={marqueeItems} />
       <TrustStrip />
       <CategoryShowcase />
       <SignatureCollections />
