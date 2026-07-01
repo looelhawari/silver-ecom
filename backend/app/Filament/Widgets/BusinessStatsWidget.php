@@ -33,6 +33,8 @@ class BusinessStatsWidget extends StatsOverviewWidget
             Stat::make('Total orders', (string) Order::count()),
             Stat::make('Pending orders', (string) Order::where('status', OrderStatus::Pending->value)->count())
                 ->color('warning'),
+            Stat::make('Confirmed orders', (string) Order::where('status', OrderStatus::Confirmed->value)->count())
+                ->color('success'),
             Stat::make('Custom requests pending', (string) CustomOrderRequest::where('status', CustomOrderStatus::Pending->value)->count())
                 ->color('warning'),
             Stat::make('Low stock (≤5)', (string) Product::where('stock_quantity', '<=', 5)->where('is_active', true)->count())

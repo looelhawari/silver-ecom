@@ -2,6 +2,34 @@
 
 All notable changes per phase.
 
+## [Completeness pass] — 2026-07-01 — Master-prompt gap closure
+
+Audited the build against the master prompt and closed the remaining gaps:
+
+### Admin
+- **Store Settings page** (`/admin/manage-store-settings`): website name, support
+  email/WhatsApp, shipping base cost + free-shipping threshold, VAT, order/invoice
+  prefixes, public display toggles (weight/workmanship/gram price), maintenance mode
+  — persisted to the `settings` table (cache flushed, audit-logged), permission-gated.
+- **Customer detail relation managers**: a customer's Orders, Custom Requests, and
+  Admin Notes now show on the Filament customer page (notes are add-able).
+- **Dashboard**: added a *Confirmed orders* stat, a **Recent orders** table widget,
+  and a **Revenue (14-day)** line chart.
+- **Audit logging broadened**: product create/update/delete, silver gram-price
+  changes, settings updates, and admin-panel logins (added to the existing order
+  status-change logging).
+
+### Storefront
+- Shop listing now exposes **price range** and **weight range** filters (the API
+  already supported them).
+- Product detail gains a **Share** button (Web Share API + clipboard fallback).
+- Home page gains a **customer-support + social** section.
+
+### Verified
+- Backend `php artisan test` → **20 passed / 94 assertions** (added customer
+  edit-page + relations render test).
+- Frontend `npm run build` clean; storefront + gated admin settings confirmed at runtime.
+
 ## [Phases 8–9] — 2026-07-01 — Security & Production Readiness
 
 ### Security (Phase 8)

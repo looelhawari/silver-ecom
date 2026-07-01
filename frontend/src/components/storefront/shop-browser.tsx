@@ -13,6 +13,10 @@ type Filters = {
   q: string;
   category: string;
   silver_type: string;
+  price_min: string;
+  price_max: string;
+  weight_min: string;
+  weight_max: string;
   sort: string;
   page: number;
 };
@@ -27,15 +31,23 @@ const SORTS = [
   { value: "best_sellers", label: "Best sellers" },
 ];
 
+const rangeInput =
+  "w-full rounded-md border border-[var(--border)] bg-white px-2 py-1.5 text-sm outline-none focus:border-[var(--primary)]";
+
 export function ShopBrowser({ initial }: { initial: Partial<Filters> }) {
   const [filters, setFilters] = useState<Filters>({
     q: initial.q ?? "",
     category: initial.category ?? "",
     silver_type: initial.silver_type ?? "",
+    price_min: "",
+    price_max: "",
+    weight_min: "",
+    weight_max: "",
     sort: initial.sort ?? "newest",
     page: 1,
   });
   const [searchTerm, setSearchTerm] = useState(filters.q);
+  const [range, setRange] = useState({ price_min: "", price_max: "", weight_min: "", weight_max: "" });
 
   const { data: categories } = useQuery({
     queryKey: ["categories"],
@@ -53,6 +65,10 @@ export function ShopBrowser({ initial }: { initial: Partial<Filters> }) {
       if (filters.q) params.set("q", filters.q);
       if (filters.category) params.set("category", filters.category);
       if (filters.silver_type) params.set("silver_type", filters.silver_type);
+      if (filters.price_min) params.set("price_min", filters.price_min);
+      if (filters.price_max) params.set("price_max", filters.price_max);
+      if (filters.weight_min) params.set("weight_min", filters.weight_min);
+      if (filters.weight_max) params.set("weight_max", filters.weight_max);
       params.set("sort", filters.sort);
       params.set("page", String(filters.page));
       return apiFetch<ProductsResponse>(`/products?${params.toString()}`);
@@ -102,6 +118,26 @@ export function ShopBrowser({ initial }: { initial: Partial<Filters> }) {
             </FilterOption>
           ))}
         </FilterGroup>
+
+        <FilterGroup label="Price (EGP)">
+          <div className="flex items-center gap-2">
+            <input type="number" min="0" placeholder="Min" value={range.price_min}
+              onChange={(e) => setRange((r) => ({ ...r, price_min: e.target.value }))} className={rangeInput} />
+            <input type="number" min="0" placeholder="Max" value={range.price_max}
+              onChange={(e) => setRange((r) => ({ ...r, price_max: e.target.value }))} className={rangeInput} />
+          </div>
+        </FilterGroup>
+
+        <FilterGroup label="Weight (g)">
+          <div className="flex items-center gap-2">
+            <input type="number" min="0" step="0.1" placeholder="Min" value={range.weight_min}
+              onChange={(e) => setRange((r) => ({ ...r, weight_min: e.target.value }))} className={rangeInput} />
+            <input type="number" min="0" step="0.1" placeholder="Max" value={range.weight_max}
+              onChange={(e) => setRange((r) => ({ ...r, weight_max: e.target.value }))} className={rangeInput} />
+          </div>
+        </FilterGroup>
+
+        <Button variant="outline" size="sm" onClick={() => update({ ...range })}>Apply filters</Button>
       </aside>
 
       {/* Results */}

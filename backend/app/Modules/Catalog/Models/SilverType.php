@@ -29,6 +29,17 @@ class SilverType extends Model
                 $type->gram_price_updated_at = now();
             }
         });
+
+        // Audit gram-price changes (a sensitive pricing input).
+        static::updated(function (SilverType $type): void {
+            if ($type->wasChanged('gram_price')) {
+                app(\App\Modules\AuditLogs\Services\AuditLogger::class)->log(
+                    'silver-type.gram_price_changed',
+                    $type,
+                    ['from' => $type->getOriginal('gram_price'), 'to' => $type->gram_price],
+                );
+            }
+        });
     }
 
     public function products(): HasMany

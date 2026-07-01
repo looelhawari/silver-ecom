@@ -1,4 +1,4 @@
-import { Gem, PencilRuler, ShieldCheck, Truck } from "lucide-react";
+import { Gem, Mail, MessageCircle, PencilRuler, Phone, ShieldCheck, Truck } from "lucide-react";
 import Link from "next/link";
 
 import { StorefrontShell } from "@/components/layout/storefront-shell";
@@ -93,6 +93,48 @@ export default async function Home() {
               <p className="mt-2 text-sm leading-6 text-[var(--muted-foreground)]">{item.copy}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* Support & social */}
+      <section className="bg-[var(--background)]">
+        <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-14 sm:px-6 md:grid-cols-2 lg:px-8">
+          <div>
+            <h2 className="font-serif text-2xl font-semibold sm:text-3xl">We&apos;re here to help</h2>
+            <p className="mt-2 text-sm text-[var(--muted-foreground)]">
+              Questions about a piece, sizing, or a custom order? Reach us any day during working hours.
+            </p>
+            <ul className="mt-5 space-y-3 text-sm">
+              <li className="flex items-center gap-3">
+                <MessageCircle className="h-4 w-4 text-[var(--accent)]" />
+                <a
+                  href={`https://wa.me/${storeConfig.contact.whatsapp.replace(/[^0-9]/g, "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[var(--primary)]"
+                >
+                  WhatsApp {storeConfig.contact.whatsapp}
+                </a>
+              </li>
+              <li className="flex items-center gap-3"><Phone className="h-4 w-4 text-[var(--accent)]" /> {storeConfig.contact.phone}</li>
+              <li className="flex items-center gap-3"><Mail className="h-4 w-4 text-[var(--accent)]" /> {storeConfig.contact.email}</li>
+            </ul>
+          </div>
+          <div className="rounded-xl border border-[var(--border)] bg-white p-6">
+            <h3 className="font-semibold">Follow {storeConfig.name}</h3>
+            <p className="mt-2 text-sm text-[var(--muted-foreground)]">See new arrivals and custom pieces on social.</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {["Instagram", "Facebook", "TikTok"].map((name) => (
+                <a
+                  key={name}
+                  href="#"
+                  className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium transition-colors hover:border-[var(--accent)] hover:text-[var(--primary)]"
+                >
+                  {name}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

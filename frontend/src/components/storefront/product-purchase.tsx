@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Minus, Plus, ShoppingBag } from "lucide-react";
+import { Heart, Minus, Plus, Share2, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -18,6 +18,20 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
   const user = useAuthStore((s) => s.user);
   const [quantity, setQuantity] = useState(1);
   const [variantId, setVariantId] = useState<number | null>(product.variants[0]?.id ?? null);
+
+  const share = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: product.name, url });
+      } catch {
+        // user cancelled
+      }
+    } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+      await navigator.clipboard.writeText(url);
+      toast.success("Link copied to clipboard");
+    }
+  };
 
   const addToWishlist = async () => {
     if (!user) {
@@ -110,6 +124,9 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
         </Button>
         <Button size="lg" variant="outline" aria-label="Add to wishlist" onClick={addToWishlist}>
           <Heart className="h-4 w-4" />
+        </Button>
+        <Button size="lg" variant="outline" aria-label="Share" onClick={share}>
+          <Share2 className="h-4 w-4" />
         </Button>
       </div>
     </div>

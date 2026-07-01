@@ -40,12 +40,26 @@ class AdminPanelSmokeTest extends TestCase
             '/admin/orders', '/admin/custom-order-requests', '/admin/payment-methods',
             '/admin/users', '/admin/support-messages',
             '/admin/pages', '/admin/faqs', '/admin/banners',
-            '/admin/audit-logs',
+            '/admin/audit-logs', '/admin/manage-store-settings',
         ];
 
         foreach ($lists as $url) {
             $this->get($url)->assertOk();
         }
+    }
+
+    public function test_customer_edit_page_with_relations_renders(): void
+    {
+        $this->actingAs($this->admin());
+
+        $customer = User::create([
+            'name' => 'Customer',
+            'email' => 'c@test.dev',
+            'password' => Hash::make('password'),
+        ]);
+
+        // Renders the Users form + Orders/CustomRequests/AdminNotes relation managers.
+        $this->get("/admin/users/{$customer->id}/edit")->assertOk();
     }
 
     public function test_resource_create_forms_render(): void

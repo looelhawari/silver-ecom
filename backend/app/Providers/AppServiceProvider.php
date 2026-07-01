@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Modules\AuditLogs\Services\AuditLogger;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,6 +36,14 @@ class AppServiceProvider extends ServiceProvider
 
             return $frontend.'/reset-password?token='.$token
                 .'&email='.urlencode($notifiable->getEmailForPasswordReset());
+        });
+
+        // Audit admin-panel logins (session guard; API token logins are stateless).
+        Event::listen(Login::class, function (Login $event): void {
+            $user = $event->user;
+            if ($user instanceof User && $user->hasAnyRole(User::ADMIN_ROLES)) {
+                app(AuditLogger::class)->log('admin.login', $user);
+            }
         });
     }
 }

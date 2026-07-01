@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Modules\CustomOrders\Models\CustomOrderRequest;
 use App\Modules\Orders\Models\Order;
 use App\Modules\Users\Models\UserAddress;
+use App\Modules\Users\Models\UserAdminNote;
 use App\Modules\Wishlist\Models\WishlistItem;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
@@ -84,5 +85,10 @@ class User extends Authenticatable implements FilamentUser
     public function wishlistItems(): HasMany
     {
         return $this->hasMany(WishlistItem::class);
+    }
+
+    public function adminNotes(): HasMany
+    {
+        return $this->hasMany(UserAdminNote::class);
     }
 }
