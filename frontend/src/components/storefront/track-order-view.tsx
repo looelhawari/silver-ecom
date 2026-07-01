@@ -3,6 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import Link from "next/link";
+
 import { PaymentProofUpload } from "@/components/storefront/payment-proof-upload";
 import { Button } from "@/components/ui/button";
 import { apiFetch, ApiError } from "@/lib/api";
@@ -71,6 +73,16 @@ export function TrackOrderView() {
 
       {order && (
         <div className="mt-8 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-serif text-xl font-semibold">{order.order_code}</h2>
+            <Link
+              href={`/order/invoice?code=${order.order_code}&phone=${encodeURIComponent(phone)}`}
+              className="text-sm text-[var(--primary)] hover:underline"
+            >
+              Invoice
+            </Link>
+          </div>
+
           <div className="grid grid-cols-3 gap-3">
             {[["Order", order.status.label], ["Payment", order.payment_status.label], ["Shipping", order.shipping_status.label]].map(([k, v]) => (
               <div key={k} className="rounded-xl border border-[var(--border)] bg-white p-3 text-center">

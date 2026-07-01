@@ -42,6 +42,9 @@ export default function LoginPage() {
           <input className={field} name="password" type="password" placeholder="Password" required />
           <Button type="submit" className="w-full" disabled={loading}>{loading ? "Signing in…" : "Sign in"}</Button>
         </form>
+        <p className="mt-3 text-sm">
+          <Link href="/forgot-password" className="text-[var(--primary)] hover:underline">Forgot your password?</Link>
+        </p>
         <p className="mt-4 text-sm text-[var(--muted-foreground)]">
           New here? <Link href="/register" className="text-[var(--primary)] hover:underline">Create an account</Link>
         </p>

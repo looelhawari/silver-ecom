@@ -3,6 +3,31 @@
 Security is a first-class requirement. This file lists the controls in place and
 the per-phase checklist. A dedicated hardening pass happens in **Phase 8**.
 
+## In place (through Phase 8)
+
+- **CORS** restricted to the storefront origin(s) via `config/cors.php`
+  (`CORS_ALLOWED_ORIGINS`/`FRONTEND_URL`), credentials-aware — never `*`.
+- **Security headers** on every response (`SecurityHeaders` middleware):
+  `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
+  `X-Permitted-Cross-Domain-Policies`. (HSTS is left to Nginx over HTTPS.)
+- **Auth:** Sanctum bearer tokens; `auth:sanctum` on all account/profile/wishlist
+  routes; blocked users cannot log in.
+- **Password reset:** anti-enumeration response; reset link targets the frontend.
+- **Server-authoritative money:** product prices and checkout totals computed
+  server-side; stock validated in a transaction.
+- **Access control:** admin panel role-gated (`canAccessPanel` + per-resource
+  permissions); customers see only their own records (owner checks / `$request->user()`);
+  guest order & custom-request tracking require **code + phone** (IDOR-tested).
+- **Uploads:** MIME + extension + size validation, random rename, stored off web root
+  (`MediaService`).
+- **Rate limits:** login, register, forgot/reset, contact, checkout, order &
+  custom-request tracking, payment-proof, custom submission.
+- **Errors:** `/api/*` always returns JSON; production runs with `APP_DEBUG=false`.
+- **Audit trail:** order status changes and admin actions recorded to `audit_logs`.
+
+Covered by automated tests: admin-panel-403 for customers, order/custom IDOR,
+out-of-stock rejection, address IDOR, auth guards.
+
 ## In place (Phase 1)
 
 - **Admin access control:** `User::canAccessPanel()` restricts `/admin` to admin

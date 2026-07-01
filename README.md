@@ -78,9 +78,23 @@ npm run dev                    # http://localhost:3000
 
 ## Development model
 
-Work proceeds **phase by phase**; after each phase the work stops for review.
-Current status: **Phase 1 — Project Setup & Foundation (complete)**. See
-[TODO_CHECKLIST.md](TODO_CHECKLIST.md) for what's done and what's next.
+Work proceeded **phase by phase**. Current status: **Phases 1–9 complete** — a
+working storefront (browse, cart, checkout, order & custom-request tracking,
+accounts, wishlist, invoices), a Filament admin, security hardening, and SEO/
+production readiness. See [TODO_CHECKLIST.md](TODO_CHECKLIST.md) for the detail and
+the small deferred items (coupons, invoice PDF, password-reset email delivery, Arabic UI).
+
+### Highlights
+- **Storefront:** home, shop (filter/sort/search), product detail, cart, checkout
+  (server-validated), order success + tracking + printable invoice, custom-order
+  request + tracking with quotes, accounts (profile/addresses/orders/requests),
+  wishlist, content/policy pages.
+- **Admin (`/admin`):** products (images/variants/pricing), categories, silver types
+  & gram prices, orders (+payment-proof review), custom requests (+convert to order),
+  customers, payment methods, content, support, audit log, dashboard widgets.
+- **Security:** server-side pricing, role-gated admin, owner-only records, guest
+  tracking by code+phone, validated uploads, CORS + security headers, rate limits.
+- **Tests:** `php artisan test` → 19 passing (92 assertions).
 
 ## Security notes (Phase 1)
 

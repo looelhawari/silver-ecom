@@ -32,11 +32,28 @@ DB_DATABASE=fidda_silver
 DB_USERNAME=fidda
 DB_PASSWORD=<strong-secret>
 FRONTEND_URL=https://your-frontend-domain
+CORS_ALLOWED_ORIGINS=https://your-frontend-domain
 SANCTUM_STATEFUL_DOMAINS=your-frontend-domain
 SESSION_DOMAIN=.your-domain          # for cross-subdomain SPA cookies
 ADMIN_EMAIL=<real-admin-email>
 ADMIN_PASSWORD=<strong-secret>
+# Real mail service (password-reset emails). Dev uses MAIL_MAILER=log.
+MAIL_MAILER=smtp
+MAIL_HOST=<smtp-host>
+MAIL_USERNAME=<smtp-user>
+MAIL_PASSWORD=<smtp-pass>
 ```
+
+### Notes
+- **Images:** demo products/categories use LoremFlickr placeholder photos. Replace
+  with real uploads via the admin panel (product/category image fields) — uploaded
+  files serve from `/storage` (run `php artisan storage:link`).
+- **Password reset** emails require a real `MAIL_*` config; the reset link points to
+  `FRONTEND_URL/reset-password`.
+- **HSTS:** enable `Strict-Transport-Security` at Nginx (only over HTTPS); other
+  security headers are set by the app.
+- On the frontend host set `NEXT_PUBLIC_API_URL=https://your-domain/api/v1` and
+  `NEXT_PUBLIC_SITE_URL=https://your-frontend-domain`.
 
 ### Nginx (backend)
 - Document root: `backend/public`

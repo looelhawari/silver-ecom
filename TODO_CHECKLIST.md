@@ -72,10 +72,23 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
       (main + gallery) and categories; `next.config` remote hosts allowed.
       Replace with real uploads via the admin panel.
 
-## Phase 8 — Security & Validation Pass
-- [ ] Forms, uploads, authorization, permissions, rate limiting, error handling,
-      privacy pages, debug-leak removal
+## Phase 8 — Security & Validation Pass  ✅ complete
+- [x] CORS restricted to the frontend origin (credentials-aware, not `*`)
+- [x] Security headers middleware (nosniff, frame-options, referrer-policy)
+- [x] Password reset flow (forgot/reset API → frontend link; anti-enumeration)
+- [x] JSON error rendering for `/api/*`; Form Requests + rate limits everywhere
+- [x] Authorization confirmed: admin role-gate, owner-only records, guest code+phone
+- [ ] Real mail service for password-reset emails (dev uses the `log` driver)
 
-## Phase 9 — UI Polish & Production Readiness
-- [ ] Design/responsiveness/states polish, SEO metadata, sitemap/robots
-- [ ] Final README/deploy/test checklist
+## Phase 9 — UI Polish & Production Readiness  ✅ complete
+- [x] Premium web fonts (Cormorant Garamond headings + Inter body) via next/font
+- [x] Metadata title template; per-route SEO; dynamic `sitemap.xml` + `robots.txt`
+- [x] Announcement bar; custom 404, error boundary, loading states
+- [x] Printable invoice page (`/order/invoice`)
+- [x] Deployment guide, `.env.example`, production checklist (see DEPLOYMENT.md)
+
+---
+
+**Status: Phases 1–9 complete.** Remaining optional/deferred: coupons, invoice PDF
+generation (printable page shipped), password-reset email delivery (needs mail creds),
+Arabic UI translation pass (schema + i18n scaffolding ready).

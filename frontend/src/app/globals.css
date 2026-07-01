@@ -7,8 +7,8 @@
  * Phase 1 uses an elegant system stack with a serif fallback for headings.
  */
 :root {
-  --app-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --app-font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --app-font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --app-font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
   --app-font-mono: "Courier New", Courier, monospace;
 
   --background: #f8f8f6;

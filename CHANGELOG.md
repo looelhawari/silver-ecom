@@ -2,6 +2,32 @@
 
 All notable changes per phase.
 
+## [Phases 8–9] — 2026-07-01 — Security & Production Readiness
+
+### Security (Phase 8)
+- CORS locked to the storefront origin (`config/cors.php`, credentials-aware) —
+  no more `*`; `CORS_ALLOWED_ORIGINS` env for production.
+- `SecurityHeaders` middleware (X-Content-Type-Options, X-Frame-Options,
+  Referrer-Policy, X-Permitted-Cross-Domain-Policies) applied globally.
+- Password reset: `POST /auth/forgot-password` + `/auth/reset-password`
+  (anti-enumeration response; reset link points to the Next.js `/reset-password`).
+- Confirmed: JSON errors for `/api/*`, Form Requests + rate limits, admin role-gate,
+  owner-only records, guest tracking by code + phone.
+
+### Polish & production (Phase 9)
+- Premium web fonts via `next/font` (Cormorant Garamond headings, Inter body).
+- Metadata title template; dynamic `sitemap.xml` (static + products + categories)
+  and `robots.txt` (private routes disallowed).
+- Announcement bar; custom `not-found`, `error` boundary, `loading` states.
+- Printable **invoice** page (`/order/invoice`) linked from order tracking.
+- Frontend `/forgot-password` and `/reset-password` pages.
+
+### Verified
+- Backend `php artisan test` → **19 passed / 92 assertions**.
+- Frontend `npm run build` clean (**29 routes**; fonts fetched).
+- CORS returns the specific origin + credentials; security headers present;
+  new pages + sitemap/robots return 200 end-to-end.
+
 ## [Phases 5–7] — 2026-07-01 — Orders, Custom Workflow & Accounts
 
 ### Order workflow (Phase 5)
