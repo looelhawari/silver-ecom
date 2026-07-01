@@ -43,5 +43,5 @@
 ## Current status
 - Frontend `npm run lint`: ✓ clean.
 - Frontend `npm run build`: ✓ clean, TypeScript ✓, locale-prefixed routes.
-- Backend `php artisan test`: ✓ 21 passed / 101 assertions.
+- Backend `php artisan test`: ✓ 25 passed / 127 assertions.
 - SEO: dynamic `sitemap.xml` + `robots.txt`, per-route metadata, single H1 on the homepage.

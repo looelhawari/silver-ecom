@@ -2,6 +2,21 @@
 
 All notable changes per phase.
 
+## [Transactional Email] — 2026-07-01 — Brevo-ready mail automation
+
+Implemented professional transactional email delivery through Laravel Mail / Brevo SMTP:
+- Added branded HTML email layout and templates for order-received invoice, payment
+  confirmation, first-login OTP, and password reset.
+- Added `TransactionalMailer` service with provider failure logging and duplicate-send
+  protection via `orders.invoice_emailed_at` and `orders.payment_confirmed_emailed_at`.
+- Checkout sends invoice emails when `customer_email` is present.
+- Payment-proof approval now records reviewer metadata, marks the order payment approved,
+  and sends confirmation once the order is confirmed or beyond.
+- First login for unverified customers sends a 6-digit OTP, stores only a hash/expiry,
+  and exposes an authenticated verification endpoint.
+- `.env.example`, API/schema/security/deployment docs updated for Brevo SMTP.
+- Verified: `php artisan test` (25 passed / 127 assertions).
+
 ## [Localization Phase] — 2026-07-01 — Public website EN / Egyptian Arabic
 
 Implemented public storefront localization while deferring admin-dashboard UI work:

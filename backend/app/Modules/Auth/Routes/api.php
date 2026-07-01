@@ -12,4 +12,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middle
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/me', [AuthController::class, 'me'])->name('me');
+    Route::post('/verify-first-login-otp', [AuthController::class, 'verifyFirstLoginOtp'])
+        ->middleware('throttle:6,1')
+        ->name('verify-first-login-otp');
 });

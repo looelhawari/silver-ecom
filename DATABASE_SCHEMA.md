@@ -13,7 +13,9 @@
   [DATA_MODELS.md](DATA_MODELS.md)).
 
 ## Framework / infra tables
-`users` (+ `phone`, `whatsapp`, `is_blocked`, `blocked_at`), `password_reset_tokens`,
+`users` (+ `phone`, `whatsapp`, `is_blocked`, `blocked_at`,
+`first_login_otp_hash`, `first_login_otp_expires_at`, `first_login_otp_sent_at`,
+`first_login_otp_verified_at`), `password_reset_tokens`,
 `sessions`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`,
 `personal_access_tokens` (Sanctum), Spatie RBAC (`roles`, `permissions`,
 `model_has_roles`, `model_has_permissions`, `role_has_permissions`), and the
@@ -34,7 +36,7 @@ white-label settings set (`settings` [key-value], `theme_settings`, `feature_fla
 | Payments | `payment_methods` | code, name/name_en/name_ar, instructions_en/instructions_ar, account_details, requires_proof, is_active, sort_order |
 | Payments | `payment_proofs` | order_id, payment_method_id, file_path, status, reviewed_by, reviewed_at, note |
 | Cart | `carts`, `cart_items` | cart: user_id / session_token; item: product_id, product_variant_id, quantity, unit_price_snapshot |
-| Orders | `orders` | order_code, user_id, customer_*, status/payment_status/shipping_status, payment_method_id, subtotal/shipping_cost/discount_total/total, currency, tracking_number/courier_name/shipping_note, notes/admin_notes, placed_at |
+| Orders | `orders` | order_code, user_id, customer_*, status/payment_status/shipping_status, payment_method_id, subtotal/shipping_cost/discount_total/total, currency, tracking_number/courier_name/shipping_note, notes/admin_notes, placed_at, invoice_emailed_at, payment_confirmed_emailed_at |
 | Orders | `order_items` | order_id, product_id, product_name/sku, variant_label, silver_type_name, weight_in_grams, unit_price, quantity, line_total |
 | Orders | `order_status_history` | order_id, type, status, note, changed_by, visible_to_customer |
 | Shipping | `shipping_addresses` | order_id, full_name, phone, whatsapp, city, area, address_line, building/floor/apartment, notes |
@@ -55,9 +57,9 @@ white-label settings set (`settings` [key-value], `theme_settings`, `feature_fla
 
 ## Migrations
 Laravel/Sanctum/Spatie defaults + `2026_06_30_133000_create_white_label_settings_tables`,
-then `2026_07_01_000001..000012` (catalog, users+addresses, payment_methods, cart,
+then `2026_07_01_000001..000013` (catalog, users+addresses, payment_methods, cart,
 orders, payment_proofs, custom_orders, content, support, wishlist, audit_logs,
-localized content columns), all in
+localized content columns, transactional mail tracking + first-login OTP), all in
 `backend/database/migrations` (centralized for deterministic FK ordering — see
 [DECISIONS.md](DECISIONS.md) ADR-008).
 

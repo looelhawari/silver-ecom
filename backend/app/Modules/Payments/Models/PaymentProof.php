@@ -4,9 +4,12 @@ namespace App\Modules\Payments\Models;
 
 use App\Models\User;
 use App\Modules\Orders\Models\Order;
+use App\Modules\Payments\Observers\PaymentProofObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy(PaymentProofObserver::class)]
 class PaymentProof extends Model
 {
     protected $fillable = [

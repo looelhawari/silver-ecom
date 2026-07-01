@@ -8,6 +8,7 @@ use App\Modules\Orders\Models\Order;
 use App\Modules\Users\Models\UserAddress;
 use App\Modules\Users\Models\UserAdminNote;
 use App\Modules\Wishlist\Models\WishlistItem;
+use App\Support\Mail\TransactionalMailer;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -21,7 +22,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'phone', 'whatsapp', 'password'])]
-#[Hidden(['password', 'remember_token'])]
+#[Hidden(['password', 'remember_token', 'first_login_otp_hash'])]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
@@ -64,7 +65,19 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'is_blocked' => 'boolean',
             'blocked_at' => 'datetime',
+            'first_login_otp_expires_at' => 'datetime',
+            'first_login_otp_sent_at' => 'datetime',
+            'first_login_otp_verified_at' => 'datetime',
         ];
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $frontend = rtrim((string) config('app.frontend_url'), '/');
+        $url = $frontend.'/reset-password?token='.$token
+            .'&email='.urlencode($this->getEmailForPasswordReset());
+
+        app(TransactionalMailer::class)->sendPasswordReset($this, $url);
     }
 
     public function addresses(): HasMany

@@ -4,6 +4,7 @@ namespace App\Modules\Orders\Observers;
 
 use App\Modules\AuditLogs\Services\AuditLogger;
 use App\Modules\Orders\Models\Order;
+use App\Support\Mail\TransactionalMailer;
 
 /**
  * Records a status-history entry (and an audit log) whenever an order's order/
@@ -11,7 +12,10 @@ use App\Modules\Orders\Models\Order;
  */
 class OrderObserver
 {
-    public function __construct(private readonly AuditLogger $audit) {}
+    public function __construct(
+        private readonly AuditLogger $audit,
+        private readonly TransactionalMailer $mailer,
+    ) {}
 
     public function updated(Order $order): void
     {
@@ -42,6 +46,10 @@ class OrderObserver
                     : $order->getOriginal($field),
                 'to' => $value,
             ]);
+        }
+
+        if ($order->wasChanged(['status', 'payment_status'])) {
+            $this->mailer->sendPaymentConfirmedIfReady($order);
         }
     }
 }

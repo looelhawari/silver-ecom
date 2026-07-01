@@ -2,6 +2,15 @@
 
 Architecture decisions, most recent first.
 
+## ADR-016 — Brevo via Laravel transactional SMTP
+**2026-07-01.** The requested email use cases are one-to-one transactional messages
+(invoice, payment-confirmed, OTP, password reset), not newsletter campaigns. We use
+Laravel Mail with Brevo SMTP credentials from `.env` instead of the Brevo campaign API.
+Order email timestamps prevent duplicate invoice/confirmation sends. First-login OTPs
+store only a hash and expiry; login remains backward-compatible by returning the normal
+token plus an additive `requires_email_otp` flag until the frontend verification UI is
+expanded in a later pass.
+
 ## ADR-015 — Public localization before admin translation UI
 **2026-07-01.** The user explicitly asked to translate the public website now and
 leave the admin dashboard for part two. We implemented locale-prefixed storefront

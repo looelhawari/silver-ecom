@@ -6,6 +6,8 @@ and [MODULES](../MODULES.md).
 
 - Laravel 13 (PHP 8.3) · **MySQL** (SQLite for tests) · REST `/api/v1`
 - Laravel Sanctum (token auth) · Spatie Laravel Permission (RBAC) · Filament v4 (`/admin`)
+- Laravel Mail transactional emails (Brevo-ready SMTP): invoices, payment confirmations,
+  first-login OTP, password reset
 
 ## Setup
 ```bash
@@ -49,6 +51,6 @@ database/ migrations (centralized) · seeders (roles, admin, silver types, categ
 - **Audit:** call `AuditLogs\Services\AuditLogger` for important admin actions.
 
 ## Tooling / tests
-- `php artisan test` — **20 passing / 94 assertions** (`tests/Feature`: AdminPanelSmokeTest,
+- `php artisan test` — **25 passing / 127 assertions** (`tests/Feature`: AdminPanelSmokeTest,
   StorefrontApiTest, AccountAndWorkflowTest).
 - `./vendor/bin/pint` — code formatting.

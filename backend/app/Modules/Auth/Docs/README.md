@@ -1,6 +1,6 @@
 # Auth Module
 
-**Responsibility:** Authentication via Laravel Sanctum: register, login, logout, current user, password reset. Issues SPA/token auth and applies login/register rate limits.
+**Responsibility:** Authentication via Laravel Sanctum: register, login, first-login OTP, logout, current user, password reset. Issues SPA/token auth and applies login/register/reset/OTP rate limits.
 
 **Owned tables (planned):** personal_access_tokens (Sanctum)
 

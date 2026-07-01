@@ -65,7 +65,7 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
 - [x] Profile view/update, change password
 - [x] Address CRUD (IDOR-guarded), order history, custom-request history
 - [x] Wishlist (API + page + product-detail + header)
-- [ ] Forgot/reset password email flow (deferred — needs mail service)
+- [x] Forgot/reset password email flow (Brevo-ready SMTP transactional mail)
 
 ## Images (interim)
 - [x] Real jewelry photos (LoremFlickr, keyword + stable lock) seeded for products
@@ -78,7 +78,7 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
 - [x] Password reset flow (forgot/reset API → frontend link; anti-enumeration)
 - [x] JSON error rendering for `/api/*`; Form Requests + rate limits everywhere
 - [x] Authorization confirmed: admin role-gate, owner-only records, guest code+phone
-- [ ] Real mail service for password-reset emails (dev uses the `log` driver)
+- [x] Real mail service wiring for password-reset emails (Brevo-ready SMTP; dev uses `log`)
 
 ## Phase 9 — UI Polish & Production Readiness  ✅ complete
 - [x] Premium web fonts (Cormorant Garamond headings + Inter body) via next/font
@@ -114,7 +114,16 @@ Legend: `[x]` done · `[~]` partial · `[ ]` pending. Phases follow the project 
 - [x] Docs updated; tests/build verified
 - [ ] Admin dashboard translation/editing UX (deferred to part two by user request)
 
-**Status: all planned phases complete + homepage redesign + public localization.**
+## Transactional Email Phase — Brevo-ready ✅ complete
+- [x] Branded email layout + templates for order invoice, payment confirmation,
+      first-login OTP and password reset
+- [x] Laravel Mail transactional service with duplicate-send protection
+- [x] Checkout sends invoice when `customer_email` is present
+- [x] Admin proof approval marks payment approved; confirmation email sends once when
+      payment is approved/paid and order is confirmed or beyond
+- [x] First-login OTP hash/expiry storage + authenticated verification endpoint
+- [x] `.env.example`, API/schema/security/deployment docs updated
+
+**Status: all planned phases complete + homepage redesign + public localization + transactional email.**
 Remaining optional/deferred: coupons, invoice **PDF** (printable page shipped),
-password-reset **email delivery** (needs mail creds), admin dashboard translation
-editing UX.
+admin dashboard translation editing UX.

@@ -37,18 +37,24 @@ SANCTUM_STATEFUL_DOMAINS=your-frontend-domain
 SESSION_DOMAIN=.your-domain          # for cross-subdomain SPA cookies
 ADMIN_EMAIL=<real-admin-email>
 ADMIN_PASSWORD=<strong-secret>
-# Real mail service (password-reset emails). Dev uses MAIL_MAILER=log.
+# Real mail service (transactional emails). Dev uses MAIL_MAILER=log.
 MAIL_MAILER=smtp
-MAIL_HOST=<smtp-host>
-MAIL_USERNAME=<smtp-user>
-MAIL_PASSWORD=<smtp-pass>
+MAIL_SCHEME=null
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_USERNAME=<brevo-smtp-login>
+MAIL_PASSWORD=<brevo-smtp-key>
+MAIL_FROM_ADDRESS=<verified-sender@your-domain.com>
+MAIL_FROM_NAME="${APP_NAME}"
 ```
 
 ### Notes
 - **Images:** demo products/categories use LoremFlickr placeholder photos. Replace
   with real uploads via the admin panel (product/category image fields) — uploaded
   files serve from `/storage` (run `php artisan storage:link`).
-- **Password reset** emails require a real `MAIL_*` config; the reset link points to
+- **Transactional emails** require a real `MAIL_*` config. Brevo SMTP is supported
+  through Laravel Mail and sends order invoices, payment-confirmed emails,
+  first-login OTP, and password-reset links. Reset links point to
   `FRONTEND_URL/reset-password`.
 - **HSTS:** enable `Strict-Transport-Security` at Nginx (only over HTTPS); other
   security headers are set by the app.
@@ -104,6 +110,7 @@ npm run start    # or deploy to a Node host / Vercel-style platform
 - [ ] `APP_DEBUG=false`, fresh `APP_KEY`, production `.env`.
 - [ ] HTTPS enforced; secure cookies.
 - [ ] Seeded admin credentials changed.
+- [ ] Brevo SMTP configured with a verified sender and rotated secrets.
 - [ ] MySQL in use; migrations run.
 - [ ] Queue worker + scheduler running.
 - [ ] Storage linked, permissions set, backups scheduled.

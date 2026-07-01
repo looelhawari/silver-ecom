@@ -12,7 +12,11 @@ the per-phase checklist. A dedicated hardening pass happens in **Phase 8**.
   `X-Permitted-Cross-Domain-Policies`. (HSTS is left to Nginx over HTTPS.)
 - **Auth:** Sanctum bearer tokens; `auth:sanctum` on all account/profile/wishlist
   routes; blocked users cannot log in.
-- **Password reset:** anti-enumeration response; reset link targets the frontend.
+- **Password reset:** anti-enumeration response; branded transactional email via the
+  configured mailer; reset link targets the frontend.
+- **First-login OTP:** unverified customers receive a 6-digit OTP on first login;
+  only a hash and expiry are stored, and the verification endpoint is token-protected
+  and throttled.
 - **Server-authoritative money:** product prices and checkout totals computed
   server-side; stock validated in a transaction.
 - **Access control:** admin panel role-gated (`canAccessPanel` + per-resource
@@ -40,6 +44,7 @@ out-of-stock rejection, address IDOR, auth guards.
   `order-manager`, `content-manager`, `product-manager`).
 - **Secrets:** only in `.env` (git-ignored). `.env.example` ships placeholders.
   Admin credentials are seeded from env vars, never hardcoded.
+  Brevo SMTP/API secrets must never be committed; rotate any key exposed outside `.env`.
 - **Password hashing:** bcrypt (cost 12) via Laravel + `password` cast.
 - **Auth foundation:** Sanctum installed; `SANCTUM_STATEFUL_DOMAINS` scoped to the
   frontend origin.
@@ -71,4 +76,5 @@ out-of-stock rejection, address IDOR, auth guards.
 - `APP_DEBUG=false`, `APP_ENV=production`, fresh `APP_KEY`.
 - HTTPS only; secure, http-only, same-site cookies.
 - Change seeded `ADMIN_*` credentials.
+- Configure Brevo/SMTP secrets only in `.env` and use a verified sender domain/address.
 - Lock down storage permissions; serve uploads safely.

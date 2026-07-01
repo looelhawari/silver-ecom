@@ -8,12 +8,16 @@ use App\Modules\Checkout\Services\CheckoutService;
 use App\Modules\Orders\Http\Resources\OrderResource;
 use App\Modules\Payments\Http\Resources\PaymentMethodResource;
 use App\Modules\Payments\Models\PaymentMethod;
+use App\Support\Mail\TransactionalMailer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
-    public function __construct(private readonly CheckoutService $checkout) {}
+    public function __construct(
+        private readonly CheckoutService $checkout,
+        private readonly TransactionalMailer $mailer,
+    ) {}
 
     /** Active payment methods the customer can choose. */
     public function paymentMethods(): JsonResponse
@@ -55,6 +59,8 @@ class CheckoutController extends Controller
 
         $order = $this->checkout->placeOrder($data);
         $order->load(['items', 'paymentMethod', 'shippingAddress', 'statusHistory']);
+
+        $this->mailer->sendOrderReceivedInvoice($order);
 
         return response()->json([
             'message' => 'Order placed successfully.',

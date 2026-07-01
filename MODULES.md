@@ -15,12 +15,12 @@ Public API routes live at `/api/v1/*`; `auth` and `storefront` are sub-prefixes.
 |--------|-----------|----------------|-----------|
 | **Core** | `/health` | Health check, shared kernel | — |
 | **AccessControl** | — | Roles & permissions (Spatie); 5 admin roles | roles, permissions |
-| **Auth** | `/auth/*` | Register/login/logout/me, forgot/reset password | personal_access_tokens |
+| **Auth** | `/auth/*` | Register/login/logout/me, first-login OTP, forgot/reset password | personal_access_tokens |
 | **Users** | `/profile*`, `/addresses*` | Accounts, profile, addresses, admin notes | users, user_addresses, user_admin_notes |
 | **Catalog** | `/products*`, `/categories*`, `/silver-types`, `/home` | Products, categories, silver types, variants, images, **pricing engine** | products, product_images, product_variants, categories, silver_types |
 | **Cart** | — (client cart) | Cart models for future server carts | carts, cart_items |
 | **Checkout** | `/checkout/*`, `/payment-methods` | Server-side totals & order placement | — |
-| **Orders** | `/orders/track`, `/orders/{code}/payment-proof` | Orders, items, status history, invoices | orders, order_items, order_status_history |
+| **Orders** | `/orders/track`, `/orders/{code}/payment-proof` | Orders, items, status history, invoices, confirmation email triggers | orders, order_items, order_status_history |
 | **Payments** | (via Orders/Checkout) | Manual methods (COD/Vodafone Cash/InstaPay/bank), proof review | payment_methods, payment_proofs |
 | **Shipping** | — | Address, manual cost, status, tracking | shipping_addresses |
 | **CustomOrders** | `/custom-requests*` | Custom requests, images, quotes, convert-to-order | custom_order_requests, custom_order_images, custom_order_quotes |

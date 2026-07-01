@@ -1,6 +1,6 @@
 # Orders Module
 
-**Responsibility:** Orders, order items, status history, and printable invoices. Generates unique order codes; enforces clean order/payment/shipping status transitions.
+**Responsibility:** Orders, order items, status history, printable invoices, and order email triggers. Generates unique order codes; enforces clean order/payment/shipping status transitions.
 
 **Owned tables (planned):** orders, order_items, order_status_history
 

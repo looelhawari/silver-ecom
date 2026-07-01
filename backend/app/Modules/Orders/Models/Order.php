@@ -6,9 +6,9 @@ use App\Models\User;
 use App\Modules\Orders\Enums\OrderStatus;
 use App\Modules\Orders\Enums\PaymentStatus;
 use App\Modules\Orders\Enums\ShippingStatus;
+use App\Modules\Orders\Observers\OrderObserver;
 use App\Modules\Payments\Models\PaymentMethod;
 use App\Modules\Payments\Models\PaymentProof;
-use App\Modules\Orders\Observers\OrderObserver;
 use App\Modules\Shipping\Models\ShippingAddress;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +26,7 @@ class Order extends Model
         'subtotal', 'shipping_cost', 'discount_total', 'total', 'currency',
         'tracking_number', 'courier_name', 'shipping_note',
         'notes', 'admin_notes', 'placed_at',
+        'invoice_emailed_at', 'payment_confirmed_emailed_at',
     ];
 
     protected function casts(): array
@@ -39,6 +40,8 @@ class Order extends Model
             'discount_total' => 'decimal:2',
             'total' => 'decimal:2',
             'placed_at' => 'datetime',
+            'invoice_emailed_at' => 'datetime',
+            'payment_confirmed_emailed_at' => 'datetime',
         ];
     }
 

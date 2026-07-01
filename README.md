@@ -11,7 +11,7 @@ orders** from customer references.
   Laravel Sanctum (token auth) · Filament v4 admin panel · Spatie Laravel Permission
 - **Currency:** EGP · **Timezone:** Africa/Cairo
 - **Status:** Phases 1–9 complete + luxury animated homepage + public-site
-  localization. Backend `php artisan test` → **21 passing / 101 assertions**;
+  localization + transactional Brevo-ready email. Backend `php artisan test` → **25 passing / 127 assertions**;
   frontend lint/build clean (locale-prefixed routes).
 
 > `Fidda` (فِضّة) is Arabic for *silver*. The brand name, contact details, theme and
@@ -97,7 +97,7 @@ Work proceeded **phase by phase**. Current status: **Phases 1–9 complete** —
 working storefront (browse, cart, checkout, order & custom-request tracking,
 accounts, wishlist, invoices), a Filament admin, security hardening, and SEO/
 production readiness. See [TODO_CHECKLIST.md](TODO_CHECKLIST.md) for the detail and
-the small deferred items (coupons, invoice PDF, password-reset email delivery, Arabic UI).
+  the small deferred items (coupons, invoice PDF, Arabic admin UI).
 
 ### Highlights
 - **Luxury homepage:** cinematic hero with a typing effect + count-up stats + cursor
@@ -112,6 +112,8 @@ the small deferred items (coupons, invoice PDF, password-reset email delivery, A
   & gram prices, orders (+payment-proof review), custom requests (+convert to order),
   customers (with orders/requests/notes), payment methods, content, support, audit log,
   **store settings page**, dashboard widgets (stats, recent orders, revenue chart).
+- **Transactional email:** Brevo-ready SMTP templates for order invoices, payment
+  confirmation after admin proof approval, first-login OTP, and password reset.
 - **Security:** server-side pricing, role-gated admin, owner-only records, guest
   tracking by code+phone, validated uploads, CORS + security headers, rate limits.
 

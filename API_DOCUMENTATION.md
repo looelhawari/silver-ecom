@@ -66,12 +66,15 @@ reveal a record (verified by tests). List endpoints return `{ data, meta }`.
 | POST | `/api/v1/auth/login` | none · throttled |
 | POST | `/api/v1/auth/logout` | token |
 | GET | `/api/v1/auth/me` | token |
+| POST | `/api/v1/auth/verify-first-login-otp` | token · throttled |
 | POST | `/api/v1/auth/forgot-password` | none · throttled |
 | POST | `/api/v1/auth/reset-password` | none · throttled |
 
 Include `Authorization: Bearer <token>` on protected calls. Password-reset emails
-require a configured mail service (dev uses the `log` driver); the reset link targets
-the frontend `/reset-password`.
+use the configured Laravel mailer (Brevo SMTP in production); the reset link targets
+the frontend `/reset-password`. First login for an unverified customer returns the
+normal token/user payload plus `requires_email_otp: true` and emails a 6-digit code.
+`verify-first-login-otp` accepts `{ "otp": "123456" }` and marks the email verified.
 
 **Account** (token):
 | Method | Path | Description |
@@ -92,10 +95,24 @@ the frontend `/reset-password`.
 
 ## Still planned / optional
 
-- Password-reset **email delivery** (endpoints exist; needs a mail service).
 - Server-generated **invoice PDF** (a printable invoice page is shipped at the
   frontend `/order/invoice`).
 - Coupons; server-persisted cart endpoints (the storefront cart is client-side today).
+
+## Transactional email
+
+The backend sends branded HTML transactional emails through Laravel Mail:
+
+| Trigger | Recipient | Template |
+|---------|-----------|----------|
+| Checkout order received | `orders.customer_email` | invoice/order received |
+| Admin approves proof and order is confirmed or beyond | `orders.customer_email` | payment confirmed |
+| First login for unverified customer | `users.email` | one-time OTP |
+| Forgot password | `users.email` | reset-password link |
+
+Production SMTP uses `.env` only. For Brevo, set `MAIL_MAILER=smtp`,
+`MAIL_HOST=smtp-relay.brevo.com`, `MAIL_PORT=587`, `MAIL_USERNAME` to the Brevo SMTP
+login, and `MAIL_PASSWORD` to the Brevo SMTP key.
 
 ## Conventions
 

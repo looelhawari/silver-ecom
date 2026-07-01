@@ -13,10 +13,13 @@ Money is never trusted from the client — see `Catalog\Services\PricingService`
 - Traits: `HasApiTokens` (Sanctum), `HasRoles` (Spatie), `Notifiable`, `HasFactory`.
 - Implements `FilamentUser`; `canAccessPanel()` allows only admin roles and blocks
   `is_blocked` users.
-- Columns added beyond Laravel defaults: `phone`, `whatsapp`, `is_blocked`, `blocked_at`.
+- Columns added beyond Laravel defaults: `phone`, `whatsapp`, `is_blocked`, `blocked_at`,
+  first-login OTP hash/expiry/sent/verified timestamps.
 - A "customer" is a `User` with **no** admin role (`isCustomer()`).
 - Relations: `addresses`, `orders`, `customOrderRequests`, `wishlistItems`, `adminNotes`.
 - Roles (Spatie): `super-admin`, `staff`, `order-manager`, `content-manager`, `product-manager`.
+- Overrides password-reset notifications to send the branded transactional email through
+  Laravel Mail/Brevo SMTP.
 
 ## Catalog — `app/Modules/Catalog/Models`
 | Model | Key fields | Relationships |
@@ -38,12 +41,15 @@ Money is never trusted from the client — see `Catalog\Services\PricingService`
 | Model | Module | Relationships / notes |
 |-------|--------|-----------------------|
 | `Cart`, `CartItem` | Cart | guest (session_token) or user cart; item snapshots unit price. Storefront uses a client cart; server is authoritative at checkout. |
-| `Order` | Orders | belongsTo User (nullable/guest); hasMany items, statusHistory; hasOne shippingAddress, paymentProof; `order_code`, totals, `OrderObserver` logs status changes |
+| `Order` | Orders | belongsTo User (nullable/guest); hasMany items, statusHistory; hasOne shippingAddress, paymentProof; `order_code`, totals, `OrderObserver` logs status changes and sends payment-confirmed email once |
 | `OrderItem` | Orders | snapshots product_name/sku/silver_type/weight/unit_price/line_total |
 | `OrderStatusHistory` | Orders | type (order/payment/shipping), status, note, changed_by, visible_to_customer |
 | `ShippingAddress` | Shipping | belongsTo Order; full address + tracking is on the order |
 | `PaymentMethod` | Payments | code, name/name_en/name_ar, instructions_en/instructions_ar, account_details, requires_proof, is_active |
-| `PaymentProof` | Payments | belongsTo Order & PaymentMethod; file_path, status (pending/approved/rejected), reviewed_by |
+| `PaymentProof` | Payments | belongsTo Order & PaymentMethod; file_path, status (pending/approved/rejected), reviewed_by; approving proof marks order payment approved |
+
+Order email timestamps (`invoice_emailed_at`, `payment_confirmed_emailed_at`) prevent
+duplicate invoice/confirmation sends when admins edit orders multiple times.
 
 ## Custom orders — `app/Modules/CustomOrders/Models`
 | Model | Relationships / notes |

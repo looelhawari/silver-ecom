@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Modules\Auth\Http\Requests\LoginRequest;
 use App\Modules\Auth\Http\Requests\RegisterRequest;
 use App\Modules\Users\Http\Resources\UserResource;
+use App\Support\Mail\TransactionalMailer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    public function __construct(private readonly TransactionalMailer $mailer) {}
+
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::create($request->safe()->only(['name', 'email', 'phone', 'whatsapp', 'password']));
@@ -44,10 +47,16 @@ class AuthController extends Controller
             ]);
         }
 
+        $requiresEmailOtp = $this->issueFirstLoginOtpIfNeeded($user);
+
         return response()->json([
             'data' => [
                 'token' => $user->createToken('storefront')->plainTextToken,
                 'user' => UserResource::make($user),
+                'requires_email_otp' => $requiresEmailOtp,
+                'otp_expires_at' => $requiresEmailOtp
+                    ? $user->first_login_otp_expires_at?->toIso8601String()
+                    : null,
             ],
         ]);
     }
@@ -62,6 +71,41 @@ class AuthController extends Controller
     public function me(Request $request): UserResource
     {
         return UserResource::make($request->user());
+    }
+
+    public function verifyFirstLoginOtp(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'otp' => ['required', 'digits:6'],
+        ]);
+
+        /** @var User $user */
+        $user = $request->user();
+
+        if (
+            ! $user->first_login_otp_hash
+            || ! $user->first_login_otp_expires_at
+            || $user->first_login_otp_expires_at->isPast()
+            || ! Hash::check($data['otp'], $user->first_login_otp_hash)
+        ) {
+            throw ValidationException::withMessages([
+                'otp' => 'The verification code is invalid or expired.',
+            ]);
+        }
+
+        $user->forceFill([
+            'email_verified_at' => $user->email_verified_at ?? now(),
+            'first_login_otp_hash' => null,
+            'first_login_otp_expires_at' => null,
+            'first_login_otp_verified_at' => now(),
+        ])->save();
+
+        return response()->json([
+            'message' => 'Email verified.',
+            'data' => [
+                'user' => UserResource::make($user->fresh()),
+            ],
+        ]);
     }
 
     /**
@@ -99,5 +143,32 @@ class AuthController extends Controller
         }
 
         throw ValidationException::withMessages(['email' => [__($status)]]);
+    }
+
+    private function issueFirstLoginOtpIfNeeded(User $user): bool
+    {
+        if ($user->email_verified_at || $user->first_login_otp_verified_at) {
+            return false;
+        }
+
+        if (
+            $user->first_login_otp_hash
+            && $user->first_login_otp_expires_at?->isFuture()
+            && $user->first_login_otp_sent_at?->greaterThan(now()->subMinutes(5))
+        ) {
+            return true;
+        }
+
+        $otp = (string) random_int(100000, 999999);
+
+        $user->forceFill([
+            'first_login_otp_hash' => Hash::make($otp),
+            'first_login_otp_expires_at' => now()->addMinutes(10),
+            'first_login_otp_sent_at' => now(),
+        ])->save();
+
+        $this->mailer->sendFirstLoginOtp($user, $otp);
+
+        return true;
     }
 }
